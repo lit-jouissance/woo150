@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2027 수능 AI 학습 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<script>MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" id="MathJax-script" async></script>
+<style>
+:root{
+  --paper:#F8F7F2;--paper-2:#FFFFFF;--ink:#1A1A22;--ink-soft:#5C5C68;--ink-faint:#9A9AA4;
+  --line:#E5E2D8;--accent:#E03A28;--accent-soft:#FBE7E3;--ok:#1C7C54;--ok-soft:#E7F3EC;
+  --warn:#B45309;--shadow:0 1px 0 rgba(26,26,34,.04),0 8px 28px -18px rgba(26,26,34,.35);
+  --serif:"Noto Serif KR",serif;--sans:"Pretendard","Apple SD Gothic Neo",system-ui,sans-serif;--mono:"JetBrains Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+button{font-family:inherit;cursor:pointer}
+.app{display:grid;grid-template-columns:268px 1fr;min-height:100vh}
+
+/* sidebar */
+.side{background:var(--paper-2);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:20px 14px}
+.logo{font-family:var(--serif);font-weight:900;font-size:17px;padding:6px 10px 4px;line-height:1.3}
+.logo b{color:var(--accent)}
+.logo small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-faint);font-weight:500;letter-spacing:.04em;margin-top:3px}
+.nav{margin-top:14px}
+.navitem{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:none;border:none;border-radius:9px;padding:9px 11px;font-size:14.5px;color:var(--ink-soft);font-weight:600}
+.navitem:hover{background:var(--paper)}
+.navitem.active{background:var(--ink);color:#fff}
+.navitem .ic{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex:0 0 auto}
+.navgroup>.navitem .chev{margin-left:auto;font-size:11px;color:var(--ink-faint);transition:.2s}
+.navgroup.open>.navitem .chev{transform:rotate(90deg)}
+.navgroup.open>.navitem:not(.active){color:var(--ink)}
+.children{display:none;margin:2px 0 6px 14px;padding-left:12px;border-left:1.5px solid var(--line)}
+.navgroup.open .children{display:block}
+.child{display:block;width:100%;text-align:left;background:none;border:none;padding:7px 10px;border-radius:7px;font-size:13.5px;color:var(--ink-soft)}
+.child:hover{background:var(--paper);color:var(--ink)}
+.child.active{color:var(--accent);font-weight:700}
+
+/* main */
+.main{padding:0}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(248,247,242,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.crumb{font-size:13px;color:var(--ink-faint);font-family:var(--mono)}
+.crumb b{color:var(--ink)}
+.ddaytop{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--accent)}
+.menubtn{display:none}
+.content{padding:30px 28px 60px;max-width:920px}
+
+h1.view{font-family:var(--serif);font-weight:900;font-size:clamp(24px,3.5vw,32px);letter-spacing:-.02em;margin-bottom:4px}
+.lead{color:var(--ink-soft);font-size:14.5px;margin-bottom:24px}
+
+/* dashboard */
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.tile{background:var(--paper-2);border:1px solid var(--line);border-radius:13px;padding:18px;box-shadow:var(--shadow)}
+.tile .lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase}
+.tile .big{font-family:var(--mono);font-weight:700;font-size:30px;margin-top:6px}
+.tile .sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.subjcard{display:flex;align-items:center;gap:12px;background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:13px 15px;box-shadow:var(--shadow)}
+.subjcard .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.subjcard .nm{font-weight:700;font-size:14.5px}
+.subjcard .rate{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+.banner{background:var(--ink);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.banner .dd{font-family:var(--mono);font-weight:700;font-size:40px;line-height:1}
+.banner .t{font-size:13px;opacity:.8;font-family:var(--mono)}
+.banner .go{background:#fff;color:var(--ink);border:none;border-radius:9px;padding:11px 18px;font-weight:700;font-size:14px}
+
+/* problem ui */
+.qbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.qprog{font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+.qunit{font-family:var(--mono);font-size:11.5px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--ink-soft)}
+.qcard{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.passage{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--ink-faint);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.75;margin-bottom:16px;white-space:pre-wrap}
+.qtext{font-size:16px;font-weight:600;line-height:1.7;margin-bottom:16px}
+.choices{display:flex;flex-direction:column;gap:9px}
+.choice{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:12px 14px;font-size:14.5px;text-align:left;transition:.14s;line-height:1.55}
+.choice:hover{border-color:var(--ink-faint)}
+.choice.sel{border-color:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--ink)}
+.choice.correct{border-color:var(--ok);background:var(--ok-soft)}
+.choice.wrong{border-color:var(--accent);background:var(--accent-soft)}
+.choice .ci{font-family:var(--mono);font-weight:700;flex:0 0 auto}
+.numinput{display:flex;gap:10px;align-items:center;margin-top:6px}
+.numinput input{font-family:var(--mono);font-size:16px;padding:11px 14px;border:1.5px solid var(--line);border-radius:10px;width:160px;background:var(--paper)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;font-size:14px}
+.btn.ghost{background:var(--paper-2);color:var(--ink)}
+.btn.soft{background:var(--paper-2);color:var(--ink-soft);border-color:var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+.reveal{margin-top:16px;border-top:1px dashed var(--line);padding-top:16px;display:none}
+.reveal.show{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.rtag{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;margin-bottom:10px}
+.rtag.ok{color:var(--ok)}.rtag.no{color:var(--accent)}
+.expl{font-size:14.5px;line-height:1.8;white-space:pre-wrap}
+.expl.solution{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:4px}
+.hintbox{background:#FFF9EC;border:1px solid #F0E2BF;border-radius:10px;padding:13px 16px;font-size:14px;line-height:1.7;margin-top:12px}
+.hintbox b{color:var(--warn)}
+.loading{display:flex;align-items:center;gap:10px;color:var(--ink-soft);font-size:14px;padding:30px 0}
+.spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.notice{background:var(--accent-soft);border:1px solid #f3d3cd;border-radius:10px;padding:12px 15px;font-size:13px;color:#8a2c20;margin-bottom:16px}
+
+/* concept / analysis */
+.concept{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.75;margin-top:12px}
+.concept h4{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--warn);text-transform:uppercase;margin-bottom:7px}
+.unitrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.unitrow .un{font-size:14px;font-weight:600;flex:0 0 200px}
+.unitrow .track{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.unitrow .fill{height:100%;border-radius:99px}
+.unitrow .pc{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);width:70px;text-align:right}
+.empty{color:var(--ink-faint);font-size:14px;padding:24px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+
+/* analysis text */
+.anbox{background:var(--paper-2);border:1px solid var(--line);border-radius:13px;padding:20px 22px;box-shadow:var(--shadow);font-size:14.5px;line-height:1.85;white-space:pre-wrap;margin-bottom:16px}
+
+/* listening grid */
+.years{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.yr{border:1.5px solid var(--line);background:var(--paper-2);border-radius:9px;padding:9px 14px;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink-soft)}
+.yr.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.omrgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(116px,1fr));gap:8px;margin:14px 0}
+.omrq{border:1px solid var(--line);border-radius:9px;padding:8px;background:var(--paper-2)}
+.omrq .qn{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-bottom:6px}
+.bubs{display:flex;gap:4px}
+.bb{flex:1;aspect-ratio:1;border:1.4px solid var(--ink-faint);border-radius:50%;font-family:var(--mono);font-size:10px;color:var(--ink-faint);display:flex;align-items:center;justify-content:center}
+.bb.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.bb.key{box-shadow:inset 0 0 0 2px var(--ok)}
+.bb.miss{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* vocab */
+.vocab-add{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.vocab-add input{flex:1;min-width:120px;border:1.5px solid var(--line);border-radius:9px;padding:10px 13px;font-size:14px;background:var(--paper-2)}
+.word{display:flex;gap:12px;align-items:center;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:8px}
+.word .w{font-weight:700;font-size:15px;flex:0 0 140px}
+.word .m{font-size:14px;color:var(--ink-soft);flex:1}
+.word .del{background:none;border:none;color:var(--ink-faint);font-size:18px}
+
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;z-index:60;width:268px;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow)}
+  .side.open{transform:none}
+  .menubtn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--line);border-radius:9px;background:var(--paper-2);font-size:18px}
+  .g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:55;display:none}
+  .scrim.show{display:block}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition:none!important}}
+.cnacc{background:var(--paper-2);border:1px solid var(--line);border-radius:11px;margin-bottom:10px;box-shadow:var(--shadow)}
+.cnacc summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:700;font-size:15px;display:flex;align-items:center}
+.cnacc summary::-webkit-details-marker{display:none}
+.cnacc summary::before{content:"＋";color:var(--ink-faint);margin-right:11px;font-family:var(--mono);font-weight:400}
+.cnacc[open] summary::before{content:"－"}
+.cnacc .concept{margin:0 14px 12px}
+.cnacc .actions{margin:0 14px 12px}
+.cnout:empty{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="logo">2027 수능 <b>AI 학습</b><small>SUNEUNG · D-DAY 2026.11.19</small></div>
+    <nav class="nav" id="nav"></nav>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="menubtn" id="menubtn">☰</button>
+        <div class="crumb" id="crumb">대시보드</div>
+      </div>
+      <div class="ddaytop" id="ddaytop">D-—</div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<script>
+/* ============ storage ============ */
+const store=(()=>{let mem={},ok=true;try{localStorage.setItem("__t","1");localStorage.removeItem("__t")}catch(e){ok=false}
+  return{get(k,d){try{const v=ok?localStorage.getItem(k):mem[k];return v?JSON.parse(v):(d??null)}catch(e){return d??null}},
+         set(k,v){try{ok?localStorage.setItem(k,JSON.stringify(v)):(mem[k]=JSON.stringify(v))}catch(e){mem[k]=JSON.stringify(v)}}}})();
+let attempts=store.get("sn_attempts",[]);
+let wrongbook=store.get("sn_wrong",{});
+let vocab=store.get("sn_vocab",[]);
+let listening=store.get("sn_listen",{});
+let bankSeen=store.get("sn_bankseen",{}); // 과목별 사용한 기출 키 목록
+const save=()=>{store.set("sn_attempts",attempts);store.set("sn_wrong",wrongbook);store.set("sn_vocab",vocab);store.set("sn_listen",listening);store.set("sn_bankseen",bankSeen)};
+
+/* ============ 기출 데이터(bank.json) 로더 ============ */
+let BANK={}; // {subject:[{...문제, _k}]}
+async function loadBank(){
+  try{
+    const r=await fetch("./data/bank.json",{cache:"no-store"});
+    if(!r.ok)return;
+    const arr=await r.json();
+    const g={};
+    arr.forEach((p,i)=>{const sk=p.subject;if(!sk)return;if(!g[sk])g[sk]=[];g[sk].push({...p,_k:p.id||(sk+"#"+i)})});
+    BANK=g;
+  }catch(e){/* bank.json 없으면 AI 생성으로만 동작 */}
+}
+
+/* ============ subject config ============ */
+const SUBJ={
+  kor:{name:"국어",hue:"#C2410C",flow:"instant",
+    units:["독서-인문·예술","독서-사회·문화","독서-과학·기술","독서-주제통합","문학-현대시","문학-현대소설","문학-고전시가","문학-고전산문","화법과 작문"]},
+  mat:{name:"수학",hue:"#1E4FD8",flow:"math",
+    units:["수학Ⅰ-지수와 로그","수학Ⅰ-삼각함수","수학Ⅰ-수열","수학Ⅱ-극한과 연속","수학Ⅱ-미분","수학Ⅱ-적분","확통-경우의 수","확통-확률","확통-통계"]},
+  engR:{name:"영어 독해",hue:"#0B7A4B",flow:"instant",
+    units:["대의 파악","세부·자료","어법·어휘","빈칸 추론","순서·삽입","문단 요약","장문"]},
+  his:{name:"한국사",hue:"#B45309",flow:"concept",
+    units:["전근대(선사~조선)","근대(개항~1910)","일제강점기","현대"]},
+  soc:{name:"사회·문화",hue:"#0E7490",flow:"concept",
+    units:["사회·문화 현상의 탐구","개인과 사회 구조","문화와 일상생활","사회 계층과 불평등","현대의 사회 변동","도표·통계 분석"]},
+  eth:{name:"생활과 윤리",hue:"#6D28D9",flow:"concept",
+    units:["실천 윤리의 기초","생명과 윤리","사회와 윤리","과학과 윤리","문화와 윤리","평화와 공존의 윤리"]},
+};
+const REVEAL={kor:"바로 확인",engR:"바로 확인",engL:"듣기 후 바로 확인",mat:"힌트 → 재도전 → 정답",his:"개념 찾아보기 → 정답",eth:"개념 찾아보기 → 정답",soc:"개념 찾아보기 → 정답"};
+
+/* ============ 중요개념 내장 데이터 (AI 없이 항상 제공) ============ */
+const CONCEPTS={
+  kor:{
+    "독서-인문·예술":"인문·예술 지문은 철학·역사·미학의 관점과 논증 구조가 핵심.\n· 글쓴이의 핵심 주장과 근거를 먼저 잡고, 대립 관점이 나오면 차이를 대조 정리.\n· 〈보기〉 적용 문항은 지문의 원리를 새 사례에 대응시키는 것이 관건.\n· 함정: 지문에 없는 상식·추측으로 판단하기.",
+    "독서-사회·문화":"법·경제·제도 지문은 개념의 조건과 예외를 정확히 따지는 것이 핵심.\n· 정의→적용 조건→예외 순으로 정보를 구조화.\n· 사례 적용·계산형 문항 빈출.\n· 함정: 조건을 뒤바꾸거나 일부만 충족한 선지.",
+    "독서-과학·기술":"원리·메커니즘의 인과·과정 흐름 파악이 핵심.\n· 과정을 단계로 도식화하고 변수 간 비례·반비례 관계를 메모.\n· 그림·그래프 연계 문항 주의.\n· 함정: 과정 순서를 바꾸거나 조건을 과도하게 일반화한 선지.",
+    "독서-주제통합":"두 지문 (가)(나)의 공통 화제에 대한 관점 차이를 비교하는 유형.\n· 각 글의 핵심 주장·전제를 한 줄 요약 후 공통점/차이점 대조.\n· 〈보기〉를 두 글에 각각 적용하는 종합 문항 빈출.\n· 함정: 한 글의 관점을 다른 글에 잘못 귀속.",
+    "문학-현대시":"화자의 정서·태도와 시상 전개, 표현법(비유·상징·반어·역설)이 핵심.\n· 화자가 누구를 향해 어떤 태도인지 먼저 확정.\n· 〈보기〉의 감상 관점으로 재해석.\n· 함정: 표현법 명칭만 보고 효과를 단정.",
+    "문학-현대소설":"서술자의 시점과 거리, 인물 간 갈등, 서사 구조가 핵심.\n· 시점(1·3인칭, 전지/관찰자) 구분과 서술 효과 파악.\n· 인물 심리 변화와 갈등의 원인·해소 추적.\n· 함정: 서술자의 평가를 인물 생각과 혼동.",
+    "문학-고전시가":"시조·가사·향가의 관습적 표현과 주제(연군·자연·유교 이념) 이해가 핵심.\n· 고어 해석보다 정서·태도와 관습적 상징(임=임금 등) 파악.\n· 함정: 현대적 의미로 단어를 오역.",
+    "문학-고전산문":"고전소설·설화의 인물 유형과 서사 구조가 핵심.\n· 전기적 요소·우연성·권선징악 구조 이해.\n· 인물 관계와 사건 전개 순서 정리.\n· 함정: 인물의 역할·관계 혼동.",
+    "화법과 작문":"화법은 말하기 전략·반응, 작문은 글쓰기 과정(생성-조직-표현-고쳐쓰기)이 핵심.\n· 발표·토론·협상에서 화자 의도와 전략 파악.\n· 작문은 조건·자료를 반영했는지 점검.\n· 함정: 자료를 잘못 활용하거나 조건 일부 누락한 선지."
+  },
+  mat:{
+    "수학Ⅰ-지수와 로그":"지수·로그 법칙과 지수·로그함수 그래프가 핵심.\n· 법칙: a^(m+n)=a^m·a^n, log_a(xy)=log_a x+log_a y, 밑변환 log_a b=log b/log a.\n· 지수함수와 로그함수는 y=x 대칭(역함수) 관계.\n· 함정: 진수>0, 밑>0이고 ≠1 등 정의역 조건 누락.",
+    "수학Ⅰ-삼각함수":"삼각함수 그래프·주기와 사인·코사인 법칙이 핵심.\n· y=sin x, cos x 주기 2π, tan x 주기 π. 진폭·주기·평행이동 해석.\n· 사인법칙 a/sinA=2R, 코사인법칙 a²=b²+c²-2bc·cosA.\n· 함정: 도형 활용에서 각의 범위·예각/둔각 조건.",
+    "수학Ⅰ-수열":"등차·등비수열, 시그마(Σ), 수학적 귀납법이 핵심.\n· 등차 a_n=a_1+(n-1)d, 등비 a_n=a_1·r^(n-1).\n· Σ 공식과 부분분수·계차 활용.\n· 함정(킬러): 규칙·조건으로 항을 추론하는 추상형. 작은 n부터 직접 나열해 규칙 발견.",
+    "수학Ⅱ-극한과 연속":"함수의 극한과 연속 조건이 핵심.\n· 좌극한=우극한=함숫값 이면 연속.\n· 0/0, ∞/∞ 꼴은 인수분해·유리화로 처리.\n· 함정: 미정계수 결정 시 분모→0이면 분자→0 조건 사용.",
+    "수학Ⅱ-미분":"도함수, 접선, 증감·극값, 속도·가속도가 핵심.\n· 접선 기울기=f'(a). 증가/감소는 f'의 부호.\n· 극값은 f'=0이고 부호 변화. 방정식 f(x)=k의 실근 수는 그래프 교점.\n· 함정: 극값 후보 중 부호 변화 없는 점 제외.",
+    "수학Ⅱ-적분":"부정·정적분과 넓이 계산이 핵심.\n· 정적분=넓이의 부호 합. 곡선과 x축, 두 곡선 사이 넓이.\n· F'(x)=f(x), 정적분으로 정의된 함수의 미분.\n· 함정: 교점 기준으로 구간을 나눠 절댓값 처리.",
+    "확통-경우의 수":"순열·조합, 중복순열·중복조합, 이항정리가 핵심.\n· 순서 있으면 순열 P, 없으면 조합 C. 중복 허용 여부 구분.\n· 같은 것 포함 순열, 원순열 주의.\n· 함정(킬러): 조건부 분배(이상/이하, 적어도)는 여사건·케이스 분할.",
+    "확통-확률":"조건부확률, 독립·종속, 곱셈정리가 핵심.\n· P(A|B)=P(A∩B)/P(B). 독립이면 P(A∩B)=P(A)P(B).\n· '적어도'는 여사건 1-P(여집합).\n· 함정: 조건부에서 표본공간이 B로 축소됨을 놓침.",
+    "확통-통계":"확률분포, 이항·정규분포, 표본평균분포, 모평균 추정이 핵심.\n· 이항분포 B(n,p): E=np, V=npq. 정규근사.\n· 표본평균의 분산=모분산/n. 표준정규 Z=(X-μ)/σ.\n· 함정: 정규분포표 값 읽기와 신뢰구간 공식 적용."
+  },
+  engR:{
+    "대의 파악":"글의 목적·주제·요지·제목 등 중심 생각을 잡는 유형.\n· 첫·끝 문장과 반복되는 핵심어에 주목.\n· 너무 넓거나 좁은 선지, 지엽적 선지 배제.\n· 함정: 본문 단어를 그대로 쓴 매력적 오답.",
+    "세부·자료":"내용 일치, 도표, 안내문, 함축 의미 유형.\n· 일치 문항은 선지별 근거 문장 대조.\n· 도표는 수치 비교·증감 표현(twice, the most 등) 정확히.\n· 함정: 도표 수치를 반대로 서술한 선지.",
+    "어법·어휘":"어법성 판단과 문맥상 어휘 유형.\n· 어법은 주술 일치·시제·관계사·분사·병렬 구조 점검.\n· 어휘는 문맥상 반대/유사어 판단.\n· 함정: 형태가 비슷한 단어, 능동/수동 혼동.",
+    "빈칸 추론":"빈칸에 들어갈 핵심 어구를 논리로 추론하는 최고난도 유형.\n· 빈칸 주변과 글 전체 논지의 일관성으로 결정.\n· 역접(however, but) 뒤 내용이 핵심인 경우 많음.\n· 함정: 글의 일부와만 맞고 전체 논지엔 어긋나는 선지.",
+    "순서·삽입":"글의 순서 배열과 문장 삽입 유형.\n· 연결어·지시어(this, such, however)와 대명사 지칭으로 흐름 추적.\n· 주어진 문장 단서가 앞·뒤 어디와 연결되는지 확인.\n· 함정: 표면적 어휘 반복에 속아 잘못 연결.",
+    "문단 요약":"글을 한 문장으로 요약하고 (A)(B)를 채우는 유형.\n· 글의 핵심 인과·대조를 추출.\n· 요약문은 본문의 패러프레이즈임을 인지.\n· 함정: 본문 어휘를 그대로 쓴 선지가 오답인 경우 많음.",
+    "장문":"1지문 2~3문항(제목·어휘·지칭·순서)을 묶어 푸는 유형.\n· 긴 글의 전체 흐름과 인물·사건 관계 정리.\n· 지칭 추론은 대명사가 가리키는 대상 추적.\n· 함정: 시간 압박. 문항 먼저 보고 필요한 정보 탐색."
+  },
+  his:{
+    "전근대(선사~조선)":"선사~조선의 통치체제·경제·사회·문화 변천이 핵심.\n· 삼국·고려·조선의 통치 제도와 신분제 흐름.\n· 대표 자료(유물·제도·인물) 판별.\n· 함정: 시대별 제도 명칭 혼동(골품제·전시과·과전법 등).",
+    "근대(개항~1910)":"개항기 불평등 조약, 개화·위정척사·동학, 대한제국, 국권 피탈이 핵심.\n· 강화도조약(1876)→갑신정변→동학농민운동→갑오개혁→대한제국→을사늑약→한일병합 흐름.\n· 함정: 사건의 선후 관계와 주체 혼동.",
+    "일제강점기":"무단·문화·민족말살 통치와 국내외 독립운동이 핵심.\n· 1910s 무단, 1920s 문화, 1930s~ 민족말살 통치 특징.\n· 3·1운동, 임시정부, 의열·무장 투쟁, 실력양성·사회운동.\n· 함정: 시기별 통치 방식과 운동 매칭 오류.",
+    "현대":"광복 후 정부 수립, 6·25, 민주화, 경제발전, 통일 노력이 핵심.\n· 4·19→5·16→유신→5·18→6월 민주항쟁의 순서와 의의.\n· 경제개발과 통일 정책(7·4공동성명, 남북기본합의서 등).\n· 함정: 민주화 사건의 연도·순서 혼동."
+  },
+  soc:{
+    "사회·문화 현상의 탐구":"사회·문화 현상의 특징과 연구 방법이 핵심.\n· 현상은 가치 함축·개연성·보편성과 특수성 공존.\n· 양적(통계·법칙) vs 질적(의미 해석) 연구, 자료수집방법 장단점.\n· 함정: 방법론적 일원론/이원론 전제 혼동.",
+    "개인과 사회 구조":"실재론·명목론, 사회화, 지위·역할, 집단·조직, 일탈이 핵심.\n· 실재론(전체>부분) vs 명목론(부분>전체).\n· 지위(귀속/성취), 역할갈등, 1·2차 집단, 공동/이익사회.\n· 일탈 이론: 아노미(뒤르켐/머튼), 낙인, 차별교제.",
+    "문화와 일상생활":"문화의 속성, 이해 태도, 하위·대중문화, 문화 변동이 핵심.\n· 속성: 학습성·공유성·축적성·전체성·변동성.\n· 태도: 자문화중심·문화사대·문화상대주의.\n· 변동 요인(발명·발견·전파)과 양상(동화/병존/융합).",
+    "사회 계층과 불평등":"불평등을 보는 관점, 계층 구조·이동, 빈곤·복지가 핵심.\n· 기능론(차등 보상) vs 갈등론(지배 구조 재생산).\n· 계층 구조(피라미드/다이아몬드), 수직·수평 이동.\n· 복지: 사회보험·공공부조·사회서비스 구분.",
+    "현대의 사회 변동":"사회 변동 이론, 세계화·정보화, 인구, 지속가능 사회가 핵심.\n· 진화론 vs 순환론, 기능론 vs 갈등론적 변동관.\n· 세계화·정보화의 명암, 저출산·고령화 대응.\n· 함정: 이론별 변동 방향(진보/순환) 혼동.",
+    "도표·통계 분석":"표·그래프의 비율·증감 해석이 사문 최고난도.\n· 비율(%)과 실수(명)의 구분, 상대비 vs 절대수.\n· 증가율·구성비 변화 계산, 전제 조건 확인.\n· 함정: 비율이 늘어도 실수는 줄 수 있음. 주어진 단서 외 추정 금지."
+  },
+  eth:{
+    "실천 윤리의 기초":"윤리학의 구분과 윤리적 접근, 도덕적 탐구·성찰이 핵심.\n· 메타/규범/기술 윤리학, 이론/실천 윤리학.\n· 의무론(칸트)·공리주의(밀)·덕윤리(아리스토텔레스)·도덕과학적 접근.\n· 함정: 각 이론의 판단 기준(동기 vs 결과 vs 품성) 혼동.",
+    "생명과 윤리":"삶과 죽음, 생명윤리, 사랑과 성 윤리가 핵심.\n· 출생·죽음의 의미, 안락사·뇌사 논쟁, 자살.\n· 생명 복제·유전자 치료·동물실험 찬반 논거.\n· 사랑과 성: 보수/중도/자유주의 입장, 가족 윤리.",
+    "사회와 윤리":"직업윤리, 사회 정의, 국가와 시민의 윤리가 핵심.\n· 분배 정의: 롤스(차등 원칙) vs 노직(소유권리).\n· 교정 정의·사형제(칸트/베카리아), 우대정책 찬반.\n· 시민불복종(롤스·소로)의 정당화 조건.",
+    "과학과 윤리":"과학기술의 가치중립성, 정보윤리, 자연관이 핵심.\n· 가치중립성 인정/부정 입장, 책임 윤리(요나스).\n· 정보윤리: 저작권·표현의 자유·잊힐 권리.\n· 자연관: 인간중심(베이컨)·동물중심(싱어/레건)·생명중심(슈바이처)·생태중심(레오폴드/네스).",
+    "문화와 윤리":"예술과 윤리, 윤리적 소비, 다문화·종교 윤리가 핵심.\n· 도덕주의 vs 예술지상주의(심미주의).\n· 윤리적 소비와 합리적 소비의 차이.\n· 다문화 이론(용광로/샐러드볼/국수대접), 종교와 윤리의 관계.",
+    "평화와 공존의 윤리":"갈등 해결과 소통, 통일 윤리, 지구촌 평화가 핵심.\n· 담론 윤리(하버마스)의 소통 합리성.\n· 통일의 비용·편익, 남북 화해.\n· 해외 원조: 싱어(공리주의 의무) vs 롤스(질서정연사회로의 의무) vs 노직(자선). 정의전쟁론."
+  }
+};
+
+/* ============ nav tree ============ */
+const NAV=[
+  {id:"dash",label:"대시보드",icon:"◈"},
+  {id:"kor",label:"국어",icon:"국",children:[["kor:analysis","기출분석"],["kor:concept","개념학습"],["kor:practice","오늘의 10문제"],["kor:wrong","오답노트"]]},
+  {id:"mat",label:"수학",icon:"수",children:[["mat:analysis","기출분석"],["mat:practice","오늘의 10문제 (힌트1·2·정답)"],["mat:wrong","오답노트"]]},
+  {id:"engR",label:"영어 독해",icon:"독",children:[["engR:analysis","기출분석"],["engR:practice","오늘의 10문제"],["engR:vocab","단어장"]]},
+  {id:"engL",label:"영어 듣기",icon:"듣",children:[["engL:grade","듣기 전용 채점 (연도별)"]]},
+  {id:"his",label:"한국사",icon:"한",children:[["his:analysis","기출분석"],["his:practice","오늘의 10문제"],["his:wrong","오답노트"]]},
+  {id:"eth",label:"생활과 윤리",icon:"윤",children:[["eth:analysis","기출분석"],["eth:practice","오늘의 10문제"],["eth:wrong","오답노트"]]},
+  {id:"soc",label:"사회·문화",icon:"사",children:[["soc:analysis","기출분석"],["soc:practice","오늘의 10문제"],["soc:wrong","오답노트"]]},
+  {id:"ai",label:"AI 분석",icon:"✦",children:[["ai:weak","취약단원"],["ai:rate","정답률"],["ai:time","학습시간"],["ai:reco","추천문제"]]},
+];
+
+function buildNav(){
+  const nav=document.getElementById("nav");nav.innerHTML="";
+  NAV.forEach(n=>{
+    if(!n.children){
+      const b=document.createElement("button");b.className="navitem";b.dataset.route=n.id;
+      b.innerHTML=`<span class="ic" style="background:var(--paper);border:1px solid var(--line)">${n.icon}</span>${n.label}`;
+      b.onclick=()=>go(n.id);nav.appendChild(b);
+    }else{
+      const g=document.createElement("div");g.className="navgroup";g.dataset.group=n.id;
+      const head=document.createElement("button");head.className="navitem";
+      head.innerHTML=`<span class="ic" style="background:var(--paper);border:1px solid var(--line)">${n.icon}</span>${n.label}<span class="chev">▶</span>`;
+      head.onclick=()=>{g.classList.toggle("open")};
+      g.appendChild(head);
+      const ch=document.createElement("div");ch.className="children";
+      n.children.forEach(([route,label])=>{const c=document.createElement("button");c.className="child";c.dataset.route=route;c.textContent=label;c.onclick=()=>go(route);ch.appendChild(c)});
+      g.appendChild(ch);nav.appendChild(g);
+    }
+  });
+}
+
+/* ============ router ============ */
+let route="dash";
+function go(r){
+  route=r;
+  document.querySelectorAll(".navitem,.child").forEach(e=>e.classList.remove("active"));
+  document.querySelectorAll(`[data-route="${r}"]`).forEach(e=>e.classList.add("active"));
+  const grp=r.split(":")[0];
+  document.querySelectorAll(".navgroup").forEach(g=>{if(g.dataset.group===grp)g.classList.add("open")});
+  closeSide();
+  render(r);
+}
+const crumbMap={dash:"대시보드",analysis:"기출분석",concept:"개념학습",practice:"오늘의 10문제",wrong:"오답노트",vocab:"단어장",grade:"듣기 전용 채점",weak:"취약단원",rate:"정답률",time:"학습시간",reco:"추천문제"};
+function setCrumb(r){
+  const c=document.getElementById("crumb");
+  if(r==="dash"){c.innerHTML="대시보드";return}
+  const[a,b]=r.split(":");const sn=SUBJ[a]?SUBJ[a].name:(a==="ai"?"AI 분석":a==="engL"?"영어 듣기":a);
+  c.innerHTML=`${sn} <b>/ ${crumbMap[b]||b}</b>`;
+}
+
+/* ============ Claude API ============ */
+let AI_OK=true;
+async function callClaude(messages,system,model){
+  let fnErr="";
+  // 1) 배포 환경: Netlify 함수가 키를 숨겨 호출
+  try{
+    const r=await fetch("/.netlify/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({messages,system,model:model||"claude-haiku-4-5-20251001",max_tokens:1200})});
+    if(r.ok){
+      const d=await r.json();
+      const t=(d.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+      if(t)return t;
+      fnErr="함수는 응답했으나 본문(content)이 비어 있음"+(d.error?(" · "+JSON.stringify(d.error)):"");
+    }else{
+      let body="";try{body=await r.text()}catch(_){}
+      fnErr=`Netlify 함수 오류 ${r.status} — ${body.slice(0,240)}`;
+    }
+  }catch(e){ fnErr="Netlify 함수에 연결 실패("+(e.message||e)+")"; }
+  // 2) Claude 미리보기 전용: 키 없이 직접 호출(배포 사이트 브라우저에선 실패)
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,system,messages})});
+    if(res.ok){const data=await res.json();return data.content.filter(b=>b.type==="text").map(b=>b.text).join("\n");}
+  }catch(_){}
+  // 함수 오류가 있으면 그 사유를 우선 노출(배포 환경 진단용)
+  throw new Error(fnErr||"AI 호출 실패 — 네트워크/인증을 확인하세요.");
+}
+function parseJSON(t){let s=t.replace(/```json|```/g,"").trim();const a=s.indexOf("{"),b=s.lastIndexOf("}");if(a>=0&&b>=0)s=s.slice(a,b+1);return JSON.parse(s)}
+
+function promptFor(skey,unit){
+  const s=SUBJ[skey];
+  const base=`당신은 2027학년도 대한민국 수능(2015 개정 교육과정) ${s.name} 출제 전문가입니다. 기출 원문은 복제하지 말고, 동일 개념·유형의 새 문항을 창작하세요. 단원: "${unit}". 난이도는 수능 3~4점 수준.`;
+  if(s.flow==="math"){
+    return{system:base+` 반드시 JSON만 출력(코드펜스·설명 금지). 수식은 LaTeX 인라인 $...$ 사용. solution은 번호 단계로 매우 자세히.`,
+      user:`다음 JSON 형식으로 수학 문제 1개를 만드세요:
+{"unit":"${unit}","question":"문제(LaTeX)","choices":["①...","②...","③...","④...","⑤..."],"answer":정답번호(1~5),"hint1":"방향만 주는 힌트","hint2":"핵심 식·접근을 주는 힌트","solution":"1) ... 2) ... 단계별 상세 풀이(LaTeX, 줄바꿈 \\n)"}`};
+  }
+  if(s.flow==="concept"){
+    return{system:base+` 반드시 JSON만 출력(코드펜스·설명 금지).`,
+      user:`다음 JSON 형식으로 5지선다 문제 1개를 만드세요:
+{"unit":"${unit}","question":"문제(필요시 자료·보기 포함)","choices":["①...","②...","③...","④...","⑤..."],"answer":정답번호(1~5),"concept":"이 문제 푸는 데 필요한 핵심 개념 정리(3~5줄)","explanation":"정답 해설 + 오답 이유"}`};
+  }
+  // instant (국어/영어독해)
+  const passNote=skey==="engR"
+    ?`지문은 영어 6~8문장으로 충실하게, 문제·선택지는 한국어로.`
+    :`국어 지문(passage)은 실제 수능처럼 12~15줄(약 250~350자, 6~9문장) 분량으로 충실하게 작성하세요. 독서는 하나의 완결된 설명문, 문학은 충분한 길이의 작품·대화, 화법과 작문은 발표문·대화·초고 형태로. 단, 선택지로 묻는 내용이 지문 안에서 분명히 판별되도록 쓰세요. 줄바꿈은 \\n.`;
+  return{system:base+` 반드시 JSON만 출력(코드펜스·설명 금지). ${passNote}`,
+    user:`다음 JSON 형식으로 5지선다 문제 1개를 만드세요:
+{"unit":"${unit}","passage":"지문(국어는 12~15줄 충실히, 없으면 빈 문자열)","question":"문제","choices":["①...","②...","③...","④...","⑤..."],"answer":정답번호(1~5),"explanation":"정답 해설 + 핵심 오답 이유"}`};
+}
+
+/* ============ seed fallback ============ */
+const SEED={
+  mat:{unit:"수학Ⅰ-수열",question:"등차수열 $\\{a_n\\}$에서 $a_2=7$, $a_5=16$일 때, $a_{10}$의 값은?",
+    choices:["① 28","② 29","③ 30","④ 31","⑤ 32"],answer:4,
+    hint1:"등차수열의 일반항은 $a_n=a_1+(n-1)d$ 입니다. 두 항으로 공차 $d$를 먼저 구하세요.",
+    hint2:"$a_5-a_2=3d$ 임을 이용해 $d$를 구하고, $a_1$을 찾은 뒤 $a_{10}$에 대입하세요.",
+    solution:"1) 일반항: $a_n=a_1+(n-1)d$.\n2) $a_5-a_2=(a_1+4d)-(a_1+d)=3d=16-7=9$ 이므로 $d=3$.\n3) $a_2=a_1+d=7 \\Rightarrow a_1=4$.\n4) $a_{10}=a_1+9d=4+27=31$.\n∴ 정답 ④"},
+  kor:{unit:"독서-사회·문화",passage:"여러 사람이 함께 이용할 수 있는 자원을 공유 자원이라 한다. 공유 자원은 누구나 자유롭게 쓸 수 있지만, 한 사람이 많이 쓰면 다른 사람이 쓸 몫이 줄어드는 특성을 지닌다.\n마을 주민 모두가 가축을 풀어 놓을 수 있는 목초지를 예로 들어 보자. 이때 각 주민은 자기 가축을 한 마리라도 더 풀어 놓는 편이 이익이다. 그 가축이 먹는 풀의 비용은 마을 전체가 나누어 지지만, 그로 인한 이익은 가축 주인이 온전히 가져가기 때문이다.\n그러나 모든 주민이 같은 판단을 내리면 목초지의 풀은 회복 속도보다 빠르게 사라지고, 결국 누구도 가축을 기를 수 없는 황무지가 된다. 개인에게 합리적인 선택이 모여 공동체 전체에는 파국을 부르는 것이다. 이를 공유지의 비극이라 한다.\n이 문제를 해결하는 방법으로는 크게 두 가지가 제시된다. 하나는 자원을 사유화하여 주인에게 관리 책임을 지우는 것이고, 다른 하나는 공동체가 이용 규칙을 정하고 위반자를 제재하는 것이다. 어느 방법이든 핵심은 개인의 이익과 공동체의 이익이 어긋나는 구조 자체를 바꾸는 데 있다.",
+    question:"윗글의 내용과 일치하지 않는 것은?",choices:["① 공유 자원은 한 사람의 사용이 다른 사람의 몫에 영향을 준다.","② 목초지에 가축을 더 풀어 놓는 비용은 마을 전체가 나누어 진다.","③ 공유지의 비극은 개인의 비합리적 선택이 쌓여 발생한다.","④ 자원의 사유화는 공유지의 비극을 해결하는 한 방법이다.","⑤ 공동체가 이용 규칙과 제재를 두는 것도 해결책이 될 수 있다."],answer:3,
+    explanation:"본문은 '개인에게 합리적인 선택'이 모여 파국이 온다고 했으므로, '비합리적 선택'이라 한 ③이 불일치. ①·②는 공유 자원의 특성과 비용 분담, ④·⑤는 두 가지 해결책으로 모두 본문과 일치한다."},
+  engR:{unit:"빈칸 추론",passage:"Many people believe that talent alone leads to success. However, research shows that consistent practice over time matters far more. Even highly gifted individuals rarely excel without sustained effort. In other words, success depends less on natural ability than on ____.",
+    question:"빈칸에 들어갈 말로 가장 적절한 것은?",choices:["① inherited talent","② persistent practice","③ lucky timing","④ financial support","⑤ social status"],answer:2,
+    explanation:"글은 재능보다 '꾸준한 연습'이 중요하다고 반복하므로 빈칸에는 ② persistent practice가 적절. 나머지는 본문 논지와 무관."},
+  his:{unit:"근대(개항~1910)",question:"다음 조약에 대한 설명으로 옳은 것은? (보기: 조선이 외국과 맺은 최초의 근대적 조약이자 불평등 조약)",
+    choices:["① 갑신정변의 결과로 체결되었다.","② 운요호 사건을 계기로 체결되었다.","③ 청의 알선으로 미국과 맺었다.","④ 을사늑약과 같은 해에 체결되었다.","⑤ 대한제국 수립 후 맺어졌다."],answer:2,
+    concept:"강화도 조약(1876)은 운요호 사건(1875)을 빌미로 일본의 강요로 체결된 최초의 근대적·불평등 조약이다. 부산 등 3개 항구 개항, 해안 측량권·치외법권 인정이 핵심.",
+    explanation:"보기는 강화도 조약. 운요호 사건이 계기이므로 ②. ①·④·⑤는 시기·사건 불일치, ③은 조미수호통상조약 설명."},
+  soc:{unit:"개인과 사회 구조",question:"사회 실재론에 대한 설명으로 옳은 것은?",
+    choices:["① 사회는 개인의 합에 불과하다.","② 개인은 사회로부터 자유로운 존재이다.","③ 사회는 개인 외부에 실재하며 개인을 구속한다.","④ 사회 현상은 개인의 심리로 환원된다.","⑤ 사회 명목론과 동일한 관점이다."],answer:3,
+    concept:"사회 실재론: 사회는 개인의 단순 합 이상이며 개인 외부에 독자적으로 실재해 개인을 구속·통제한다(전체>부분). 사회 명목론: 사회는 개인의 합에 붙인 이름일 뿐, 실재하는 것은 개인(부분>전체).",
+    explanation:"실재론은 사회가 개인 외부에 실재하며 개인을 구속한다고 보므로 ③. ①·②·④는 명목론, ⑤는 반대 관점이라 오답."},
+  eth:{unit:"사회와 윤리",question:"분배 정의에 관한 롤스와 노직의 입장 비교로 옳은 것은?",
+    choices:["① 롤스는 결과의 완전한 평등을 주장한다.","② 노직은 최소 수혜자 우대를 강조한다.","③ 롤스는 차등의 원칙으로 불평등을 정당화할 수 있다고 본다.","④ 노직은 재분배를 위한 국가 개입을 적극 지지한다.","⑤ 두 사람 모두 절차적 정의를 부정한다."],answer:3,
+    concept:"롤스: 공정으로서의 정의. 차등의 원칙 — 최소 수혜자에게 최대 이익이 될 때 불평등 허용. 노직: 소유 권리론. 취득·이전·교정이 정당하면 그 분배는 정의로우며, 재분배를 위한 국가 개입(확장 국가)에 반대(최소 국가 지지).",
+    explanation:"롤스는 차등의 원칙으로 일정한 불평등을 정당화하므로 ③. ①은 롤스가 완전 평등을 주장하지 않음, ②는 롤스, ④는 노직과 반대, ⑤는 둘 다 절차적 정의 중시라 오답."},
+};
+
+/* ============ stats helpers ============ */
+const dday=(()=>{const t=new Date();t.setHours(0,0,0,0);return Math.max(0,Math.round((new Date(2026,10,19)-t)/864e5))})();
+function rateOf(skey){const a=attempts.filter(x=>x.subject===skey);if(!a.length)return null;return Math.round(a.filter(x=>x.correct).length/a.length*100)}
+function recordAttempt(o){
+  attempts.push({subject:o.subject,unit:o.unit,correct:o.correct,seconds:o.seconds,ts:Date.now()});
+  if(attempts.length>6000)attempts=attempts.slice(-6000);
+  if(!o.correct){if(!wrongbook[o.subject])wrongbook[o.subject]=[];wrongbook[o.subject].unshift({...o.problem,userAnswer:o.userAnswer,ts:Date.now()});wrongbook[o.subject]=wrongbook[o.subject].slice(0,40)}
+  save()
+}
+
+/* ============ render dispatcher ============ */
+const C=document.getElementById("content");
+function render(r){
+  setCrumb(r);C.scrollTop=0;
+  const[a,b]=r.split(":");
+  if(r==="dash")return viewDash();
+  if(a==="ai")return viewAI(b);
+  if(a==="engL")return viewListening();
+  if(b==="analysis")return viewAnalysis(a);
+  if(b==="concept")return viewConcept(a);
+  if(b==="vocab")return viewVocab();
+  if(b==="wrong")return viewWrong(a);
+  if(b==="practice")return startSession(a);
+  C.innerHTML="<div class='empty'>준비 중입니다.</div>";
+}
+
+/* ============ dashboard ============ */
+function todayConcept(){
+  const flat=[];Object.keys(CONCEPTS).forEach(sk=>{Object.keys(CONCEPTS[sk]).forEach(u=>flat.push({skey:sk,subjName:SUBJ[sk].name,hue:SUBJ[sk].hue,unit:u,text:CONCEPTS[sk][u]}))});
+  const d=new Date();const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);
+  return flat[doy%flat.length];
+}
+function viewDash(){
+  const total=attempts.length, correct=attempts.filter(x=>x.correct).length;
+  const mins=Math.round(attempts.reduce((s,x)=>s+(x.seconds||0),0)/60);
+  const cards=Object.keys(SUBJ).map(k=>{const r=rateOf(k);return`<div class="subjcard"><span class="dot" style="background:${SUBJ[k].hue}"></span><span class="nm">${SUBJ[k].name}</span><span class="rate">${r===null?"–":r+"%"}</span></div>`}).join("");
+  const tc=todayConcept();
+  C.innerHTML=`
+  <div class="banner">
+    <div><div class="t">2027 수능까지</div><div class="dd">D-${dday}</div><div class="t">2026.11.19(목) 시행</div></div>
+    <button class="go" onclick="go('kor:practice')">오늘의 10문제 시작 →</button>
+  </div>
+  <div class="tile" style="margin-bottom:22px;border-left:3px solid ${tc.hue}">
+    <div class="lab">오늘의 핵심 개념 · ${tc.subjName} · ${esc(tc.unit)}</div>
+    <div class="expl" style="margin-top:10px;font-size:14px">${esc(tc.text)}</div>
+    <div class="actions" style="margin-top:12px"><button class="btn soft" onclick="go('${tc.skey}:concept')">${tc.subjName} 개념 더 보기</button></div>
+  </div>
+  <div class="grid g3" style="margin-bottom:22px">
+    <div class="tile"><div class="lab">총 푼 문제</div><div class="big">${total}</div><div class="sub">누적 학습 기록</div></div>
+    <div class="tile"><div class="lab">전체 정답률</div><div class="big">${total?Math.round(correct/total*100)+"%":"–"}</div><div class="sub">${correct} / ${total} 정답</div></div>
+    <div class="tile"><div class="lab">학습 시간</div><div class="big">${mins}<span style="font-size:16px">분</span></div><div class="sub">문제 풀이 누적</div></div>
+  </div>
+  <h1 class="view" style="font-size:20px;margin-bottom:14px">과목별 정답률</h1>
+  <div class="grid g2">${cards}</div>
+  <p class="lead" style="margin-top:24px;font-size:13px">정답 공개 방식 — 국어·영어 독해: 바로 확인 · 영어 듣기: 듣기 후 바로 확인 · 수학: 힌트→재도전→정답 · 한국사·생윤·사문: 개념 찾아보기→정답</p>`;
+  typeset(C);
+}
+
+/* ============ 기출분석 (AI) ============ */
+function bankFreqTable(skey){
+  const items=BANK[skey]||[];
+  if(!items.length)return "";
+  const cnt={};items.forEach(p=>{const u=p.unit||"기타";cnt[u]=(cnt[u]||0)+1});
+  const max=Math.max(...Object.values(cnt));
+  const rows=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([u,n])=>
+    `<div class="unitrow"><span class="un">${esc(u)}</span><span class="track"><span class="fill" style="width:${n/max*100}%;background:${SUBJ[skey].hue}"></span></span><span class="pc">${n}문항</span></div>`).join("");
+  return `<div class="tile" style="margin-bottom:16px"><div class="lab">기출 단원별 출제 빈도 · 총 ${items.length}문항 (업로드한 기출 기준)</div><div style="margin-top:12px">${rows}</div></div>`;
+}
+async function viewAnalysis(skey){
+  const s=SUBJ[skey]||{name:skey==="engL"?"영어 듣기":skey};
+  const freq=SUBJ[skey]?bankFreqTable(skey):"";
+  C.innerHTML=`<h1 class="view">${s.name} · 기출분석</h1><p class="lead">최근 출제 경향과 단원별 우선순위를 정리합니다.</p>
+    ${freq}
+    <div id="anbody"><div class="loading"><span class="spin"></span>AI가 ${s.name} 출제 경향을 분석하는 중…</div></div>`;
+  const body=document.getElementById("anbody");
+  try{
+    const txt=await callClaude([{role:"user",content:`2027학년도 수능 ${s.name} 영역의 최근 3개년(2025·2026·2027학년도) 출제 경향을 분석해 주세요. 단원별 출제 비중 경향, 난이도/킬러가 몰리는 지점, 자주 나오는 함정 유형, 학습 우선순위를 항목별로 간결히. 마크다운 기호 없이 줄글과 줄바꿈으로.`}],
+      "당신은 수능 출제 경향 분석 전문가입니다. 기출 원문은 복제하지 말고 경향만 서술하세요.");
+    body.innerHTML=`<div class="anbox">${esc(txt)}</div><p class="lead" style="font-size:12.5px">${(BANK[skey]||[]).length?"위 빈도표는 업로드한 기출 데이터로 계산된 실제 수치입니다.":"기출을 bank.json으로 추가하면 위에 실제 빈도표가 표시됩니다."}</p>`;
+  }catch(e){
+    body.innerHTML=`<div class="notice">AI 분석은 Claude 환경에서 작동합니다. 배포 환경에서는 기출 PDF 업로드 기반 분석을 이용하세요.</div>
+      <div class="anbox">${esc(staticAnalysis(skey))}</div>`;
+  }
+}
+function staticAnalysis(skey){
+  const m={kor:"독서는 주제 통합·과학기술 지문의 〈보기〉 추론이 고난도. 문학은 갈래 복합이 핵심. 화법과 작문은 화작 융합 지문에서 자료 활용·조건 반영을 묻는 문항에 주의.",
+    mat:"공통(수Ⅰ·Ⅱ)에서 22문항, 확통 8문항. 킬러는 수열(규칙 추론)·미적분 활용·경우의 수(조건 분배)에 집중. 준킬러 비중이 늘어 22번·15번·30번대 관리가 관건.",
+    engR:"빈칸 추론·순서·삽입이 등급을 가름. 절대평가지만 추론 묶음 정답률이 1·2등급 분기점. 어휘 추론과 함축 의미도 까다로워짐.",
+    his:"자료(사료·지도) 제시형 위주, 난이도 평이. 시대별 대표 키워드 암기와 자료 판별로 단기 완성 가능.",
+    soc:"도표·통계 분석이 최고난도. 비율·증감 계산과 함정 선지 처리에서 등급이 갈림. 개념(실재론/명목론, 기능론/갈등론) 정확히 구분 필요.",
+    eth:"사상가 비교(롤스 vs 노직, 싱어 vs 롤스, 칸트·밀)가 핵심. 입장의 미세한 차이를 묻는 선지에서 실수 주의."};
+  return m[skey]||"출제 경향 분석을 준비 중입니다.";
+}
+
+/* ============ 개념학습 / 개념 reference ============ */
+function viewConcept(skey){
+  const s=SUBJ[skey];const bank=CONCEPTS[skey]||{};
+  const rows=s.units.map(u=>`<details class="cnacc"><summary>${esc(u)}</summary>
+    <div class="concept"><h4>핵심 개념</h4>${esc(bank[u]||"개념 정리를 준비 중입니다.")}</div>
+    <div class="actions"><button class="btn soft" onclick="aiConcept('${skey}','${u.replace(/'/g,"")}',this)">AI로 더 자세히</button></div>
+    <div class="cnout" style="margin:0 14px 12px"></div></details>`).join("");
+  C.innerHTML=`<h1 class="view">${s.name} · 개념학습</h1><p class="lead">단원별 핵심 개념을 AI 연결과 무관하게 항상 제공합니다. 'AI로 더 자세히'로 확장하세요.</p>${rows}`;
+  typeset(C);
+}
+async function aiConcept(skey,unit,btn){
+  const out=btn.parentElement.nextElementSibling;
+  out.innerHTML=`<div class="loading"><span class="spin"></span>${esc(unit)} 더 자세히 정리 중…</div>`;
+  try{const txt=await callClaude([{role:"user",content:`2027 수능 ${SUBJ[skey].name} "${unit}" 단원의 핵심 개념을 수험생용으로 자세히 정리해 주세요. 꼭 알아야 할 정의·공식·구분 포인트·빈출 함정을 항목별로. 마크다운 기호 없이.`}],"수능 개념 정리 전문가");
+    out.innerHTML=`<div class="concept" style="margin-top:10px"><h4>AI 상세 정리</h4>${esc(txt)}</div>`;typeset(out);
+  }catch(e){out.innerHTML=`<div class="concept" style="margin-top:10px">AI 상세 정리는 서버 연결(Netlify 함수)이 있을 때 제공됩니다. 위 핵심 개념을 참고하세요.</div>`}
+}
+
+/* ============ practice session ============ */
+let session=null;
+function startSession(skey){
+  const s=SUBJ[skey];
+  session={skey,i:0,n:10,correct:0,t0:0};
+  C.innerHTML=`<h1 class="view">${s.name} · 오늘의 10문제</h1>
+    <p class="lead">정답 공개: <b>${REVEAL[skey]}</b></p>
+    <div class="qbar"><span class="qprog" id="qprog">1 / 10</span><span class="qunit" id="qunit"></span></div>
+    <div id="qarea"></div>`;
+  nextProblem();
+}
+async function nextProblem(){
+  const{skey}=session;const area=document.getElementById("qarea");
+  if(session.i>=session.n){return sessionDone()}
+  if(!session.served)session.served=new Set(); // 이번 세션에서 이미 낸 문제(중복 방지)
+  document.getElementById("qprog").textContent=`${session.i+1} / ${session.n}`;
+  // 1) 기출 bank에서 아직 안 푼 문제 우선 (이전 세션 기록 + 이번 세션 모두 제외)
+  const seen=bankSeen[skey]||[];
+  const pool=(BANK[skey]||[]).filter(p=>!seen.includes(p._k)&&!session.served.has(p._k));
+  let prob,src,key;
+  if(pool.length){
+    prob=pool[Math.floor(Math.random()*pool.length)];key=prob._k;src="기출";
+    (bankSeen[skey]=bankSeen[skey]||[]).push(prob._k);save();
+  }else{
+    // 2) AI 실시간 생성
+    area.innerHTML=`<div class="loading"><span class="spin"></span>AI가 문제를 출제하는 중…</div>`;
+    const unit=SUBJ[skey].units[Math.floor(Math.random()*SUBJ[skey].units.length)];
+    try{
+      const p=promptFor(skey,unit);
+      prob=parseJSON(await callClaude([{role:"user",content:p.user}],p.system));
+      src="AI 생성";key="ai#"+session.i; // 매번 새 문제이므로 고유 키
+    }catch(e){
+      // 3) AI 미연결: 같은 예시를 1~10번 반복하지 않도록, 예시는 세션당 1회만 노출 후 안내로 종료
+      const seedKey="seed#"+skey;
+      if(session.served.has(seedKey))return sessionAborted(skey,e);
+      prob={...SEED[skey]};src="예시";key=seedKey;
+    }
+  }
+  session.served.add(key);
+  document.getElementById("qunit").textContent=(prob.unit||"")+(prob.source?" · "+prob.source:"")+" · "+src;
+  session.t0=Date.now();
+  renderProblem(skey,prob,src==="예시");
+}
+function sessionAborted(skey,err){
+  const area=document.getElementById("qarea");
+  area.innerHTML=`<div class="qcard">
+    <div class="lab" style="font-family:var(--mono);color:var(--warn);font-size:11px;letter-spacing:.08em">AI 출제 미연결</div>
+    <p style="margin:10px 0;color:var(--ink-soft);line-height:1.7">실시간 AI 문제 생성에 연결되지 않아, 같은 예시가 1~10번 반복되지 않도록 ${session.i}문제에서 멈췄습니다. 매번 새 문제가 나오게 하려면 아래 중 하나가 필요합니다.</p>
+    <ul style="margin:0 0 12px 18px;color:var(--ink-soft);font-size:14px;line-height:1.85">
+      <li>Netlify에 배포 + 환경변수 <b>ANTHROPIC_API_KEY</b> 등록 (로컬 파일·미배포 상태에서는 생성이 동작하지 않습니다)</li>
+      <li>또는 <b>data/bank.json</b>에 이 과목 문항을 추가</li>
+    </ul>
+    <p style="color:var(--ink-faint);font-size:12px;font-family:var(--mono)">사유: ${esc(String(err&&err.message||err||"네트워크/인증 오류"))}</p>
+    <div class="actions" style="margin-top:14px"><button class="btn" onclick="startSession('${skey}')">다시 시도</button><button class="btn ghost" onclick="go('dash')">대시보드</button></div>
+  </div>`;
+}
+function sessionDone(){
+  const area=document.getElementById("qarea");
+  const rate=Math.round(session.correct/session.n*100);
+  area.innerHTML=`<div class="qcard" style="text-align:center">
+    <div class="lab" style="font-family:var(--mono);color:var(--ink-faint);font-size:11px;letter-spacing:.08em">SESSION COMPLETE</div>
+    <div style="font-family:var(--mono);font-weight:700;font-size:40px;margin:10px 0">${rate}%</div>
+    <p style="color:var(--ink-soft)">${session.n}문제 중 ${session.correct}개 정답</p>
+    <div class="actions" style="justify-content:center"><button class="btn" onclick="startSession('${session.skey}')">다시 10문제</button><button class="btn ghost" onclick="go('dash')">대시보드</button></div>
+  </div>`;
+}
+
+function renderProblem(skey,prob,seeded){
+  const area=document.getElementById("qarea");
+  const flow=SUBJ[skey].flow;
+  const choices=(prob.choices||[]).map((c,idx)=>`<button class="choice" data-i="${idx+1}"><span class="ci">${["①","②","③","④","⑤"][idx]}</span><span>${esc(c.replace(/^[①②③④⑤]\s*/,""))}</span></button>`).join("");
+  let head=seeded?`<div class="notice">AI 연결이 없어 내장 예시문제를 표시합니다. (Claude 환경에서 실시간 출제)</div>`:"";
+  let inputBlock = flow==="math" && !prob.choices ? `<div class="numinput"><input id="numAns" placeholder="정답 입력" autocomplete="off"></div>` : "";
+  area.innerHTML=`${head}<div class="qcard">
+    ${prob.passage?`<div class="passage">${esc(prob.passage)}</div>`:""}
+    <div class="qtext">${esc(prob.question)}</div>
+    ${prob.choices?`<div class="choices" id="choices">${choices}</div>`:inputBlock}
+    <div class="actions" id="acts"></div>
+    <div class="reveal" id="reveal"></div>
+  </div>`;
+  typeset(area);
+  let sel=null;
+  const choicesEl=document.getElementById("choices");
+  if(choicesEl)choicesEl.querySelectorAll(".choice").forEach(c=>c.onclick=()=>{if(choicesEl.classList.contains("locked"))return;sel=+c.dataset.i;choicesEl.querySelectorAll(".choice").forEach(x=>x.classList.remove("sel"));c.classList.add("sel")});
+  const acts=document.getElementById("acts");
+  const reveal=document.getElementById("reveal");
+
+  if(flow==="math"){buildMath();}
+  else if(flow==="concept"){buildConcept();}
+  else{buildInstant();}
+
+  function lock(){if(choicesEl)choicesEl.classList.add("locked")}
+  function markChoices(correctNo){if(!choicesEl)return;choicesEl.querySelectorAll(".choice").forEach(c=>{const i=+c.dataset.i;if(i===correctNo)c.classList.add("correct");else if(i===sel&&sel!==correctNo)c.classList.add("wrong")})}
+  function commit(correct,userAnswer){recordAttempt({subject:skey,unit:prob.unit,correct,seconds:Math.round((Date.now()-session.t0)/1000),problem:prob,userAnswer});if(correct)session.correct++;}
+
+  function nextBtn(){const b=document.createElement("button");b.className="btn";b.textContent=session.i+1>=session.n?"결과 보기":"다음 문제";b.onclick=()=>{session.i++;nextProblem()};return b}
+
+  // 국어 / 영어 독해 — 바로 확인
+  function buildInstant(){
+    const check=document.createElement("button");check.className="btn";check.textContent="정답 확인";
+    check.onclick=()=>{if(!sel){alert("선택지를 고르세요");return}
+      lock();const ok=sel===prob.answer;markChoices(prob.answer);commit(ok,sel);
+      reveal.innerHTML=`<div class="rtag ${ok?"ok":"no"}">${ok?"✓ 정답":"✗ 오답"} · 정답 ${["①","②","③","④","⑤"][prob.answer-1]}</div><div class="expl">${esc(prob.explanation||"")}</div>`;
+      reveal.classList.add("show");typeset(reveal);acts.innerHTML="";acts.appendChild(nextBtn())};
+    acts.appendChild(check);
+  }
+  // 한국사/생윤/사문 — 개념 찾아보기 → 정답
+  function buildConcept(){
+    let conceptShown=false;
+    const cb=document.createElement("button");cb.className="btn ghost";cb.textContent="개념 찾아보기";
+    cb.onclick=()=>{if(conceptShown)return;conceptShown=true;
+      const box=document.createElement("div");box.className="concept";box.innerHTML=`<h4>개념 찾아보기</h4>${esc(prob.concept||"관련 개념 정리")}`;
+      reveal.classList.add("show");reveal.appendChild(box);typeset(reveal)};
+    const check=document.createElement("button");check.className="btn";check.textContent="정답 보기";
+    check.onclick=()=>{if(!sel){alert("선택지를 고르세요");return}
+      lock();const ok=sel===prob.answer;markChoices(prob.answer);commit(ok,sel);
+      const r=document.createElement("div");r.innerHTML=`<div class="rtag ${ok?"ok":"no"}" style="margin-top:12px">${ok?"✓ 정답":"✗ 오답"} · 정답 ${["①","②","③","④","⑤"][prob.answer-1]}</div><div class="expl">${esc(prob.explanation||"")}</div>`;
+      reveal.classList.add("show");reveal.appendChild(r);typeset(reveal);acts.innerHTML="";acts.appendChild(nextBtn())};
+    acts.appendChild(cb);acts.appendChild(check);
+  }
+  // 수학 — 힌트1 → 힌트2 → 재도전 → 정답(상세풀이)
+  function buildMath(){
+    let h1=false,h2=false,answered=false,lastAns=null;
+    const checkUser=()=>{
+      if(prob.choices){if(!sel){alert("답을 고르세요");return}lastAns=sel;answered=true;
+        const ok=sel===prob.answer;
+        const fb=document.createElement("div");fb.className="hintbox";fb.style.background=ok?"var(--ok-soft)":"var(--accent-soft)";fb.style.borderColor=ok?"#bfe0cd":"#f3d3cd";
+        fb.innerHTML=ok?"<b style='color:var(--ok)'>맞았습니다.</b> 정답을 눌러 상세 풀이를 확인하세요.":"<b style='color:var(--accent)'>다시 생각해 볼까요.</b> 힌트를 보고 재도전하거나 정답을 확인하세요.";
+        reveal.classList.add("show");reveal.appendChild(fb);
+      }else{const v=document.getElementById("numAns").value.trim();if(!v){alert("정답을 입력하세요");return}lastAns=v;answered=true;
+        const ok=String(prob.answer).replace(/\s/g,"")===v.replace(/\s/g,"");
+        const fb=document.createElement("div");fb.className="hintbox";fb.innerHTML=ok?"<b style='color:var(--ok)'>맞았습니다.</b>":"<b style='color:var(--accent)'>아직 정답이 아닙니다.</b> 힌트 후 재도전해 보세요.";
+        reveal.classList.add("show");reveal.appendChild(fb);}
+    };
+    const b1=document.createElement("button");b1.className="btn soft";b1.textContent="힌트 1";
+    b1.onclick=()=>{if(h1)return;h1=true;const d=document.createElement("div");d.className="hintbox";d.innerHTML=`<b>힌트 1.</b> ${esc(prob.hint1||"")}`;reveal.classList.add("show");reveal.appendChild(d);typeset(reveal)};
+    const b2=document.createElement("button");b2.className="btn soft";b2.textContent="힌트 2";
+    b2.onclick=()=>{if(h2)return;h2=true;const d=document.createElement("div");d.className="hintbox";d.innerHTML=`<b>힌트 2.</b> ${esc(prob.hint2||"")}`;reveal.classList.add("show");reveal.appendChild(d);typeset(reveal)};
+    const retry=document.createElement("button");retry.className="btn ghost";retry.textContent="재도전 (답 제출)";
+    retry.onclick=()=>{checkUser();typeset(reveal)};
+    const sol=document.createElement("button");sol.className="btn";sol.textContent="정답·상세풀이";
+    sol.onclick=()=>{lock();const correctNo=prob.choices?prob.answer:null;if(correctNo)markChoices(correctNo);
+      const ok=prob.choices?(lastAns===prob.answer):(String(prob.answer).replace(/\s/g,"")===String(lastAns||"").replace(/\s/g,""));
+      commit(!!answered&&ok,lastAns);
+      const r=document.createElement("div");
+      r.innerHTML=`<div class="rtag ${answered&&ok?"ok":"no"}" style="margin-top:12px">정답 ${prob.choices?["①","②","③","④","⑤"][prob.answer-1]:esc(String(prob.answer))}</div><div class="expl solution">${esc(prob.solution||"")}</div>`;
+      reveal.classList.add("show");reveal.appendChild(r);typeset(reveal);
+      acts.innerHTML="";acts.appendChild(nextBtn())};
+    acts.appendChild(b1);acts.appendChild(b2);acts.appendChild(retry);acts.appendChild(sol);
+  }
+}
+
+/* ============ 오답노트 ============ */
+function viewWrong(skey){
+  const s=SUBJ[skey];const list=wrongbook[skey]||[];
+  if(!list.length){C.innerHTML=`<h1 class="view">${s.name} · 오답노트</h1><div class="empty">아직 오답이 없습니다. 문제를 풀면 틀린 문항이 여기 쌓입니다.</div>`;return}
+  C.innerHTML=`<h1 class="view">${s.name} · 오답노트</h1><p class="lead">틀린 문항 ${list.length}개 · 다시 보며 약점을 메우세요.</p>
+    <div class="actions" style="margin-bottom:16px"><button class="btn soft" onclick="clearWrong('${skey}')">오답노트 비우기</button></div>
+    ${list.map((p,i)=>`<div class="qcard"><div class="qunit" style="margin-bottom:10px">${esc(p.unit||"")}</div>
+      ${p.passage?`<div class="passage">${esc(p.passage)}</div>`:""}
+      <div class="qtext">${esc(p.question)}</div>
+      ${p.choices?`<div class="choices">${p.choices.map((c,idx)=>`<div class="choice ${idx+1===p.answer?"correct":(idx+1===p.userAnswer?"wrong":"")}"><span class="ci">${["①","②","③","④","⑤"][idx]}</span><span>${esc(c.replace(/^[①②③④⑤]\s*/,""))}</span></div>`).join("")}</div>`:""}
+      <div class="reveal show" style="border:none;padding-top:12px"><div class="rtag ok">정답 ${p.choices?["①","②","③","④","⑤"][p.answer-1]:esc(String(p.answer))}</div><div class="expl ${p.solution?"solution":""}">${esc(p.solution||p.explanation||"")}</div></div>
+    </div>`).join("")}`;
+  typeset(C);
+}
+function clearWrong(skey){if(!confirm("이 과목 오답노트를 비울까요?"))return;wrongbook[skey]=[];save();viewWrong(skey)}
+
+/* ============ 단어장 ============ */
+function viewVocab(){
+  C.innerHTML=`<h1 class="view">영어 독해 · 단어장</h1><p class="lead">독해 중 모르는 단어를 모아 복습하세요.</p>
+    <div class="vocab-add"><input id="vw" placeholder="단어"><input id="vm" placeholder="뜻"><button class="btn" id="vadd">추가</button><button class="btn ghost" id="vai">AI 추천 단어</button></div>
+    <div id="vlist"></div>`;
+  document.getElementById("vadd").onclick=()=>{const w=document.getElementById("vw").value.trim(),m=document.getElementById("vm").value.trim();if(!w)return;vocab.unshift({w,m});save();document.getElementById("vw").value="";document.getElementById("vm").value="";renderVlist()};
+  document.getElementById("vai").onclick=aiVocab;
+  renderVlist();
+}
+function renderVlist(){const el=document.getElementById("vlist");if(!vocab.length){el.innerHTML=`<div class="empty">단어가 없습니다. 직접 추가하거나 AI 추천을 받아 보세요.</div>`;return}
+  el.innerHTML=vocab.map((v,i)=>`<div class="word"><span class="w">${esc(v.w)}</span><span class="m">${esc(v.m||"")}</span><button class="del" onclick="delWord(${i})">×</button></div>`).join("")}
+function delWord(i){vocab.splice(i,1);save();renderVlist()}
+async function aiVocab(){
+  const el=document.getElementById("vlist");el.insertAdjacentHTML("afterbegin",`<div class="loading" id="vload"><span class="spin"></span>수능 빈출 어휘 생성 중…</div>`);
+  try{const txt=await callClaude([{role:"user",content:`수능 영어 독해 빈출 고난도 어휘 8개를 JSON 배열로만 출력: [{"w":"단어","m":"한국어 뜻"}]. 코드펜스 금지.`}],"수능 영어 어휘 전문가");
+    const arr=JSON.parse(txt.replace(/```json|```/g,"").trim());vocab=[...arr,...vocab];save()}catch(e){alert("AI 추천은 Claude 환경에서 작동합니다.")}
+  const l=document.getElementById("vload");if(l)l.remove();renderVlist();
+}
+
+/* ============ 영어 듣기 채점 ============ */
+const YEARS=["2022","2023","2024","2025","2026","2027 6모"];
+let curYear=YEARS[0];
+function viewListening(){
+  C.innerHTML=`<h1 class="view">영어 듣기 · 듣기 전용 채점</h1>
+    <p class="lead">정답 공개: <b>듣기 후 바로 확인</b> · 연도별 듣기(17문항)를 들으며 답을 마킹하고 즉시 채점하세요. 실제 음원은 EBS·평가원에서 재생하세요.</p>
+    <div class="years" id="years">${YEARS.map(y=>`<button class="yr ${y===curYear?"active":""}" data-y="${y}">${y}</button>`).join("")}</div>
+    <div class="notice">정답 키는 본인 답안지 기준으로 1회 입력하면 저장됩니다. (저작권상 정답을 자동 제공하지 않습니다.)</div>
+    <div id="lbody"></div>`;
+  document.querySelectorAll(".yr").forEach(b=>b.onclick=()=>{curYear=b.dataset.y;document.querySelectorAll(".yr").forEach(x=>x.classList.toggle("active",x.dataset.y===curYear));renderListen()});
+  renderListen();
+}
+function renderListen(){
+  const body=document.getElementById("lbody");
+  const rec=listening[curYear]||{key:Array(17).fill(0),mark:Array(17).fill(0),best:null};
+  listening[curYear]=rec;
+  const grid=(arr,cls,onclick)=>Array.from({length:17},(_,i)=>`<div class="omrq"><div class="qn">${i+1}번</div><div class="bubs">${[1,2,3,4,5].map(n=>`<button class="bb ${arr[i]===n?"on":""}" data-q="${i}" data-n="${n}" data-t="${cls}">${n}</button>`).join("")}</div></div>`).join("");
+  body.innerHTML=`
+    <h1 class="view" style="font-size:17px;margin:18px 0 8px">① 정답 키 입력 <span style="font-size:12px;color:var(--ink-faint);font-weight:400">(답안지의 정답)</span></h1>
+    <div class="omrgrid" id="keygrid">${grid(rec.key,"key")}</div>
+    <h1 class="view" style="font-size:17px;margin:22px 0 8px">② 내 답안 마킹</h1>
+    <div class="omrgrid" id="markgrid">${grid(rec.mark,"mark")}</div>
+    <div class="actions"><button class="btn" id="grade">채점하기</button><button class="btn soft" id="lreset">초기화</button></div>
+    <div id="lresult" style="margin-top:16px">${rec.best!==null?`<div class="qcard"><div class="rtag ok">최고 기록 ${rec.best} / 17</div></div>`:""}</div>`;
+  body.querySelectorAll(".bb").forEach(b=>b.onclick=()=>{const q=+b.dataset.q,n=+b.dataset.n,t=b.dataset.t;const tgt=t==="key"?rec.key:rec.mark;tgt[q]=tgt[q]===n?0:n;save();renderListen()});
+  document.getElementById("grade").onclick=()=>{
+    let sc=0;for(let i=0;i<17;i++)if(rec.key[i]&&rec.key[i]===rec.mark[i])sc++;
+    rec.best=rec.best===null?sc:Math.max(rec.best,sc);save();
+    document.querySelectorAll('#markgrid .bb').forEach(b=>{const q=+b.dataset.q,n=+b.dataset.n;if(rec.key[q]&&n===rec.key[q])b.classList.add("key");if(rec.mark[q]===n&&rec.key[q]&&rec.mark[q]!==rec.key[q])b.classList.add("miss")});
+    document.getElementById("lresult").innerHTML=`<div class="qcard"><div class="rtag ${sc>=13?"ok":"no"}">${curYear} 채점 결과 · ${sc} / 17</div><p style="color:var(--ink-soft);font-size:14px">초록 테두리=정답, 빨강=내 오답. 틀린 번호 유형을 복습하세요.</p></div>`;
+  };
+  document.getElementById("lreset").onclick=()=>{listening[curYear]={key:Array(17).fill(0),mark:Array(17).fill(0),best:null};save();renderListen()};
+}
+
+/* ============ AI 분석 ============ */
+function unitStats(){
+  const map={};
+  attempts.forEach(a=>{const k=a.subject+"|"+(a.unit||"기타");if(!map[k])map[k]={subject:a.subject,unit:a.unit||"기타",tot:0,ok:0};map[k].tot++;if(a.correct)map[k].ok++});
+  return Object.values(map);
+}
+function viewAI(tab){
+  const subTabs=[["weak","취약단원"],["rate","정답률"],["time","학습시간"],["reco","추천문제"]];
+  const nav=subTabs.map(([t,l])=>`<button class="yr ${t===tab?"active":""}" onclick="go('ai:${t}')">${l}</button>`).join("");
+  let html=`<h1 class="view">AI 분석</h1><p class="lead">학습 기록을 기반으로 약점을 진단하고 다음 학습을 추천합니다.</p><div class="years">${nav}</div>`;
+  if(!attempts.length){C.innerHTML=html+`<div class="empty">아직 학습 기록이 없습니다. 문제를 풀면 분석이 생성됩니다.</div>`;return}
+  const us=unitStats();
+  if(tab==="weak"){
+    const sorted=[...us].filter(u=>u.tot>=1).sort((a,b)=>(a.ok/a.tot)-(b.ok/b.tot)).slice(0,8);
+    html+=sorted.map(u=>{const pc=Math.round(u.ok/u.tot*100);const hue=pc<50?"var(--accent)":pc<70?"var(--warn)":"var(--ok)";
+      return`<div class="unitrow"><span class="un">${SUBJ[u.subject].name} · ${esc(u.unit)}</span><span class="track"><span class="fill" style="width:${pc}%;background:${hue}"></span></span><span class="pc">${pc}% (${u.ok}/${u.tot})</span></div>`}).join("");
+  }else if(tab==="rate"){
+    html+=Object.keys(SUBJ).map(k=>{const r=rateOf(k);const t=attempts.filter(x=>x.subject===k).length;return`<div class="unitrow"><span class="un">${SUBJ[k].name}</span><span class="track"><span class="fill" style="width:${r||0}%;background:${SUBJ[k].hue}"></span></span><span class="pc">${r===null?"–":r+"%"} (${t})</span></div>`}).join("");
+  }else if(tab==="time"){
+    const bySub=Object.keys(SUBJ).map(k=>({k,sec:attempts.filter(x=>x.subject===k).reduce((s,x)=>s+(x.seconds||0),0)}));
+    const tot=bySub.reduce((s,x)=>s+x.sec,0);
+    html+=`<div class="tile" style="margin-bottom:16px"><div class="lab">총 학습시간</div><div class="big">${Math.round(tot/60)}<span style="font-size:16px">분</span></div></div>`;
+    html+=bySub.map(x=>`<div class="unitrow"><span class="un">${SUBJ[x.k].name}</span><span class="track"><span class="fill" style="width:${tot?x.sec/tot*100:0}%;background:${SUBJ[x.k].hue}"></span></span><span class="pc">${Math.round(x.sec/60)}분</span></div>`).join("");
+  }else{ // reco
+    const weak=[...us].filter(u=>u.tot>=1).sort((a,b)=>(a.ok/a.tot)-(b.ok/b.tot))[0];
+    if(weak){html+=`<div class="anbox">가장 취약한 단원은 <b>${SUBJ[weak.subject].name} · ${esc(weak.unit)}</b> (정답률 ${Math.round(weak.ok/weak.tot*100)}%)입니다. 이 단원을 집중 보강하세요.</div>
+      <div class="actions"><button class="btn" onclick="recoStart('${weak.subject}')">${SUBJ[weak.subject].name} 보강 문제 풀기</button></div>`}
+    else html+=`<div class="empty">데이터가 더 쌓이면 맞춤 추천이 생성됩니다.</div>`;
+  }
+  C.innerHTML=html;
+}
+function recoStart(skey){go(skey+":practice")}
+
+/* ============ util ============ */
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}
+function typeset(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]).catch(()=>{})}}
+
+/* ============ mobile ============ */
+const side=document.getElementById("side"),scrim=document.getElementById("scrim");
+document.getElementById("menubtn").onclick=()=>{side.classList.add("open");scrim.classList.add("show")};
+scrim.onclick=closeSide;function closeSide(){side.classList.remove("open");scrim.classList.remove("show")}
+
+/* ============ init ============ */
+document.getElementById("ddaytop").textContent="D-"+dday;
+buildNav();go("dash");
+loadBank().then(()=>{if(route==="dash")viewDash()}); // 기출 데이터 로드 후 갱신
+</script>
+</body>
+</html>
