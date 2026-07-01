@@ -1,6 +1,7 @@
 {
   "name": "claude-api-vercel",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.0"
   }
