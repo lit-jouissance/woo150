@@ -229,15 +229,9 @@ function gradeOf(subj,raw){const g=gradeCut[subj];if(!g)return null;for(let i=0;
 /* ============ 전체 집계(Firebase) ============ */
 // ▼▼ Firebase 콘솔 > 프로젝트 설정 > 웹 앱 config를 여기에 붙여넣으세요 ▼▼
 const FIREBASE_CONFIG={
-     apiKey: "AIzaSyCw1-6a6wFwMaS3jfJE7RFQLJOKY_ba4_E",
-    authDomain: "woo150.firebaseapp.com",
-    databaseURL: "https://woo150-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "woo150",
-    storageBucket: "woo150.firebasestorage.app",
-    messagingSenderId: "947080551367",
-    appId: "1:947080551367:web:35f6e2c86384f09ad1d7e2"
+  apiKey:"", authDomain:"", databaseURL:"", projectId:"", storageBucket:"", messagingSenderId:"", appId:""
 };
-const ADMIN_PASS="1360"; // 관리자 통계 접근 암호(원하는 값으로 바꾸세요)
+const ADMIN_PASS="1119"; // 관리자 통계 접근 암호(원하는 값으로 바꾸세요)
 let fbDB=null;
 function fbInit(){
   if(fbDB)return fbDB;
@@ -393,7 +387,7 @@ function setCrumb(r){
 let AI_OK=true;
 async function callClaude(messages,system,model){
   let fnErr="";
-  // 1) 배포 환경: Netlify 함수가 키를 숨겨 호출
+  // 1) 배포 환경: 서버 함수(/api/claude)가 키를 숨겨 호출
   try{
     const r=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({messages,system,model:model||"claude-haiku-4-5-20251001",max_tokens:1200})});
@@ -404,9 +398,9 @@ async function callClaude(messages,system,model){
       fnErr="함수는 응답했으나 본문(content)이 비어 있음"+(d.error?(" · "+JSON.stringify(d.error)):"");
     }else{
       let body="";try{body=await r.text()}catch(_){}
-      fnErr=`Netlify 함수 오류 ${r.status} — ${body.slice(0,240)}`;
+      fnErr=`/api/claude 오류 ${r.status} — ${body.slice(0,240)}`;
     }
-  }catch(e){ fnErr="Netlify 함수에 연결 실패("+(e.message||e)+")"; }
+  }catch(e){ fnErr="/api/claude 연결 실패("+(e.message||e)+")"; }
   // 2) Claude 미리보기 전용: 키 없이 직접 호출(배포 사이트 브라우저에선 실패)
   try{
     const res=await fetch("https://api.anthropic.com/v1/messages",{
@@ -580,7 +574,7 @@ async function aiConcept(skey,unit,btn){
   out.innerHTML=`<div class="loading"><span class="spin"></span>${esc(unit)} 더 자세히 정리 중…</div>`;
   try{const txt=await callClaude([{role:"user",content:`2027 수능 ${SUBJ[skey].name} "${unit}" 단원의 핵심 개념을 수험생용으로 자세히 정리해 주세요. 꼭 알아야 할 정의·공식·구분 포인트·빈출 함정을 항목별로. 마크다운 기호 없이.`}],"수능 개념 정리 전문가");
     out.innerHTML=`<div class="concept" style="margin-top:10px"><h4>AI 상세 정리</h4>${esc(txt)}</div>`;typeset(out);
-  }catch(e){out.innerHTML=`<div class="concept" style="margin-top:10px">AI 상세 정리는 서버 연결(Netlify 함수)이 있을 때 제공됩니다. 위 핵심 개념을 참고하세요.</div>`}
+  }catch(e){out.innerHTML=`<div class="concept" style="margin-top:10px">AI 상세 정리를 불러오지 못했습니다. 위 핵심 개념을 먼저 참고하세요.<br><span style="font-size:12px;color:var(--ink-faint)">사유: ${esc(String(e&&e.message||e))} · AI가 되려면 <b>/api/claude</b> 프록시가 동작해야 합니다.</span></div>`}
 }
 
 /* ============ practice session ============ */
@@ -632,7 +626,7 @@ function sessionAborted(skey,err){
     <div class="lab" style="font-family:var(--mono);color:var(--warn);font-size:11px;letter-spacing:.08em">AI 출제 미연결</div>
     <p style="margin:10px 0;color:var(--ink-soft);line-height:1.7">실시간 AI 문제 생성에 연결되지 않아, 같은 예시가 1~10번 반복되지 않도록 ${session.i}문제에서 멈췄습니다. 매번 새 문제가 나오게 하려면 아래 중 하나가 필요합니다.</p>
     <ul style="margin:0 0 12px 18px;color:var(--ink-soft);font-size:14px;line-height:1.85">
-      <li>Netlify에 배포 + 환경변수 <b>ANTHROPIC_API_KEY</b> 등록 (로컬 파일·미배포 상태에서는 생성이 동작하지 않습니다)</li>
+      <li>서버 함수(<b>/api/claude</b>) 배포 + 환경변수 <b>ANTHROPIC_API_KEY</b> 등록 (로컬 파일·미배포 상태에서는 생성이 동작하지 않습니다)</li>
       <li>또는 <b>data/bank.json</b>에 이 과목 문항을 추가</li>
     </ul>
     <p style="color:var(--ink-faint);font-size:12px;font-family:var(--mono)">사유: ${esc(String(err&&err.message||err||"네트워크/인증 오류"))}</p>
