@@ -229,12 +229,13 @@ function gradeOf(subj,raw){const g=gradeCut[subj];if(!g)return null;for(let i=0;
 /* ============ 전체 집계(Firebase) ============ */
 // ▼▼ Firebase 콘솔 > 프로젝트 설정 > 웹 앱 config를 여기에 붙여넣으세요 ▼▼
 const FIREBASE_CONFIG={
-  apiKey: "AIzaSyCw1-6a6wFwMaS3jfJE7RFQLJOKY_ba4_E",
-  authDomain: "woo150.firebaseapp.com",
-  projectId: "woo150",
-  storageBucket: "woo150.firebasestorage.app",
-  messagingSenderId: "947080551367",
-  appId: "1:947080551367:web:01bff4ae4f7f5b90d1d7e2"
+     apiKey: "AIzaSyCw1-6a6wFwMaS3jfJE7RFQLJOKY_ba4_E",
+    authDomain: "woo150.firebaseapp.com",
+    databaseURL: "https://woo150-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "woo150",
+    storageBucket: "woo150.firebasestorage.app",
+    messagingSenderId: "947080551367",
+    appId: "1:947080551367:web:35f6e2c86384f09ad1d7e2"
 };
 const ADMIN_PASS="1360"; // 관리자 통계 접근 암호(원하는 값으로 바꾸세요)
 let fbDB=null;
