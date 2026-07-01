@@ -302,14 +302,14 @@ const CONCEPTS={
 const NAV=[
   {id:"dash",label:"대시보드",icon:"◈"},
   {id:"kor",label:"국어",icon:"국",children:[["kor:analysis","기출분석"],["kor:concept","개념학습"],["kor:practice","오늘의 10문제"],["kor:wrong","오답노트"]]},
-  {id:"mat",label:"수학",icon:"수",children:[["mat:analysis","기출분석"],["mat:practice","오늘의 10문제 (힌트1·2·정답)"],["mat:wrong","오답노트"]]},
-  {id:"engR",label:"영어 독해",icon:"독",children:[["engR:analysis","기출분석"],["engR:practice","오늘의 10문제"],["engR:vocab","단어장"]]},
+  {id:"mat",label:"수학",icon:"수",children:[["mat:analysis","기출분석"],["mat:concept","개념학습"],["mat:practice","오늘의 10문제 (힌트1·2·정답)"],["mat:wrong","오답노트"]]},
+  {id:"engR",label:"영어 독해",icon:"독",children:[["engR:analysis","기출분석"],["engR:concept","개념학습"],["engR:practice","오늘의 10문제"],["engR:vocab","단어장"]]},
   {id:"engL",label:"영어 듣기",icon:"듣",children:[["engL:grade","듣기 전용 채점 (연도별)"]]},
-  {id:"his",label:"한국사",icon:"한",children:[["his:analysis","기출분석"],["his:practice","오늘의 10문제"],["his:wrong","오답노트"]]},
-  {id:"eth",label:"생활과 윤리",icon:"윤",children:[["eth:analysis","기출분석"],["eth:practice","오늘의 10문제"],["eth:wrong","오답노트"]]},
-  {id:"soc",label:"사회·문화",icon:"사",children:[["soc:analysis","기출분석"],["soc:practice","오늘의 10문제"],["soc:wrong","오답노트"]]},
+  {id:"his",label:"한국사",icon:"한",children:[["his:analysis","기출분석"],["his:concept","개념학습"],["his:practice","오늘의 10문제"],["his:wrong","오답노트"]]},
+  {id:"eth",label:"생활과 윤리",icon:"윤",children:[["eth:analysis","기출분석"],["eth:concept","개념학습"],["eth:practice","오늘의 10문제"],["eth:wrong","오답노트"]]},
+  {id:"soc",label:"사회·문화",icon:"사",children:[["soc:analysis","기출분석"],["soc:concept","개념학습"],["soc:practice","오늘의 10문제"],["soc:wrong","오답노트"]]},
   {id:"grade",label:"기출 채점·등급",icon:"✓",children:[["grade:kor","국어"],["grade:mat","수학"],["grade:eng","영어"],["grade:his","한국사"],["grade:eth","생활과 윤리"],["grade:soc","사회·문화"]]},
-  {id:"ai",label:"AI 분석",icon:"✦",children:[["ai:weak","취약단원"],["ai:rate","정답률"],["ai:time","학습시간"],["ai:reco","추천문제"]]},
+  {id:"ai",label:"AI 분석",icon:"✦",children:[["ai:weak","취약단원"],["ai:rate","정답률"],["ai:time","학습시간"],["ai:daily","일별 학습"],["ai:reco","추천문제"]]},
 ];
 
 function buildNav(){
@@ -343,7 +343,7 @@ function go(r){
   closeSide();
   render(r);
 }
-const crumbMap={dash:"대시보드",analysis:"기출분석",concept:"개념학습",practice:"오늘의 10문제",wrong:"오답노트",vocab:"단어장",grade:"듣기 전용 채점",weak:"취약단원",rate:"정답률",time:"학습시간",reco:"추천문제"};
+const crumbMap={dash:"대시보드",analysis:"기출분석",concept:"개념학습",practice:"오늘의 10문제",wrong:"오답노트",vocab:"단어장",grade:"듣기 전용 채점",weak:"취약단원",rate:"정답률",time:"학습시간",daily:"일별 학습",reco:"추천문제"};
 function setCrumb(r){
   const c=document.getElementById("crumb");
   if(r==="dash"){c.innerHTML="대시보드";return}
@@ -358,7 +358,7 @@ async function callClaude(messages,system,model){
   let fnErr="";
   // 1) 배포 환경: Netlify 함수가 키를 숨겨 호출
   try{
-    const r=await fetch("/.netlify/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},
+    const r=await fetch("/.api/claude",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({messages,system,model:model||"claude-haiku-4-5-20251001",max_tokens:1200})});
     if(r.ok){
       const d=await r.json();
@@ -772,7 +772,7 @@ function unitStats(){
   return Object.values(map);
 }
 function viewAI(tab){
-  const subTabs=[["weak","취약단원"],["rate","정답률"],["time","학습시간"],["reco","추천문제"]];
+  const subTabs=[["weak","취약단원"],["rate","정답률"],["time","학습시간"],["daily","일별 학습"],["reco","추천문제"]];
   const nav=subTabs.map(([t,l])=>`<button class="yr ${t===tab?"active":""}" onclick="go('ai:${t}')">${l}</button>`).join("");
   let html=`<h1 class="view">AI 분석</h1><p class="lead">학습 기록을 기반으로 약점을 진단하고 다음 학습을 추천합니다.</p><div class="years">${nav}</div>`;
   if(!attempts.length){C.innerHTML=html+`<div class="empty">아직 학습 기록이 없습니다. 문제를 풀면 분석이 생성됩니다.</div>`;return}
@@ -788,6 +788,24 @@ function viewAI(tab){
     const tot=bySub.reduce((s,x)=>s+x.sec,0);
     html+=`<div class="tile" style="margin-bottom:16px"><div class="lab">총 학습시간</div><div class="big">${Math.round(tot/60)}<span style="font-size:16px">분</span></div></div>`;
     html+=bySub.map(x=>`<div class="unitrow"><span class="un">${SUBJ[x.k].name}</span><span class="track"><span class="fill" style="width:${tot?x.sec/tot*100:0}%;background:${SUBJ[x.k].hue}"></span></span><span class="pc">${Math.round(x.sec/60)}분</span></div>`).join("");
+  }else if(tab==="daily"){
+    const byDay={};
+    attempts.forEach(a=>{const key=new Date(a.ts||Date.now()).toLocaleDateString("sv-SE");
+      const r=(byDay[key]=byDay[key]||{sec:{},cnt:0});r.sec[a.subject]=(r.sec[a.subject]||0)+(a.seconds||0);r.cnt++;});
+    const days=Object.keys(byDay).sort().reverse().slice(0,14);
+    if(!days.length){html+=`<div class="empty">아직 일별 기록이 없습니다. 문제를 풀면 날짜별로 집계됩니다.</div>`;}
+    else{
+      const today=new Date().toLocaleDateString("sv-SE"), t=byDay[today];
+      if(t){const tot=Object.values(t.sec).reduce((s,v)=>s+v,0);
+        html+=`<div class="tile" style="margin-bottom:16px"><div class="lab">오늘 학습</div><div class="big">${Math.round(tot/60)}<span style="font-size:16px">분</span></div><div class="sub">${t.cnt}문항 · ${Object.keys(t.sec).map(k=>SUBJ[k]?SUBJ[k].name+" "+Math.round(t.sec[k]/60)+"분":"").filter(Boolean).join(" · ")||"–"}</div></div>`;}
+      html+=days.map(d=>{const rec=byDay[d];const tot=Object.values(rec.sec).reduce((s,v)=>s+v,0)||1;
+        const segs=Object.keys(SUBJ).filter(k=>rec.sec[k]).map(k=>`<span style="height:100%;width:${rec.sec[k]/tot*100}%;background:${SUBJ[k].hue}"></span>`).join("");
+        const brk=Object.keys(SUBJ).filter(k=>rec.sec[k]).map(k=>`${SUBJ[k].name} ${Math.round(rec.sec[k]/60)}분`).join(" · ");
+        return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>${d.slice(5)}</b><span class="sub">${Math.round(tot/60)}분 · ${rec.cnt}문항</span></div>
+          <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--paper);border:1px solid var(--line);margin:4px 0">${segs}</div>
+          <div class="sub">${brk||"–"}</div></div>`;}).join("");
+      html+=`<div class="sub" style="margin-top:14px">${Object.keys(SUBJ).map(k=>`<span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><span style="width:10px;height:10px;border-radius:2px;background:${SUBJ[k].hue};display:inline-block"></span>${SUBJ[k].name}</span>`).join("")}</div>`;
+    }
   }else{ // reco
     const weak=[...us].filter(u=>u.tot>=1).sort((a,b)=>(a.ok/a.tot)-(b.ok/b.tot))[0];
     if(weak){html+=`<div class="anbox">가장 취약한 단원은 <b>${SUBJ[weak.subject].name} · ${esc(weak.unit)}</b> (정답률 ${Math.round(weak.ok/weak.tot*100)}%)입니다. 이 단원을 집중 보강하세요.</div>
