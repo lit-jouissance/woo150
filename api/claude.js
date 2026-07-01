@@ -3,36 +3,37 @@
 // Vercel 대시보드 > 프로젝트 > Settings > Environment Variables 에 ANTHROPIC_API_KEY 등록 필요.
 // 파일 위치: 프로젝트 폴더 안의  api/claude.js   →  호출 주소는  /api/claude
 
-import Anthropic from '@anthropic-ai/sdk';
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
 export default async function handler(req, res) {
-  // GET 요청이 아닌 POST 요청만 받도록 제한 (필요에 따라 조절)
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
-
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) {
+    return res.status(500).json({ error: "ANTHROPIC_API_KEY가 설정되지 않았습니다." });
+  }
   try {
-    // API 키 확인용 안전장치
-    if (!process.env.ANTHROPIC_API_KEY) {
-      return res.status(500).json({ error: "ANTHROPIC_API_KEY가 설정되지 않았습니다." });
-    }
+    // Vercel은 application/json 요청의 body를 자동으로 파싱해줍니다.
+    // 혹시 문자열로 들어오는 경우까지 대비해 둘 다 처리합니다.
+    const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+    const { messages, system, model, max_tokens } = body;
 
-    // Netlify의 event.body 대신 Vercel은 req.body를 사용합니다.
-    const { prompt } = req.body; 
-
-    const response = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: model || "claude-haiku-4-5-20251001", // 생성용: 빠르고 저렴
+        max_tokens: max_tokens || 1200,
+        system,
+        messages,
+      }),
     });
-
-    // Vercel 응답 방식
-    return res.status(200).json(response);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+    const data = await r.json();
+    return res.status(r.status).json(data);
+  } catch (e) {
+    return res.status(500).json({ error: String(e) });
   }
 }

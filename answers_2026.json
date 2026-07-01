@@ -1,0 +1,1312 @@
+{
+  "version": 1,
+  "exam": "2026학년도 대학수학능력시험",
+  "form": "홀수형",
+  "note": "정답·배점만 담은 사실 데이터입니다(문항 본문 미포함). 공식 문제지로 풀고 앱에서 채점·분석하는 용도로 사용하세요. 출처: 한국교육과정평가원 정답표.",
+  "answers": [
+    {
+      "id": "2026-kor-01",
+      "subject": "kor",
+      "no": 1,
+      "section": "공통",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-02",
+      "subject": "kor",
+      "no": 2,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-03",
+      "subject": "kor",
+      "no": 3,
+      "section": "공통",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-04",
+      "subject": "kor",
+      "no": 4,
+      "section": "공통",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-05",
+      "subject": "kor",
+      "no": 5,
+      "section": "공통",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-06",
+      "subject": "kor",
+      "no": 6,
+      "section": "공통",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-07",
+      "subject": "kor",
+      "no": 7,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-08",
+      "subject": "kor",
+      "no": 8,
+      "section": "공통",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-09",
+      "subject": "kor",
+      "no": 9,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-10",
+      "subject": "kor",
+      "no": 10,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-11",
+      "subject": "kor",
+      "no": 11,
+      "section": "공통",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-12",
+      "subject": "kor",
+      "no": 12,
+      "section": "공통",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-13",
+      "subject": "kor",
+      "no": 13,
+      "section": "공통",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-14",
+      "subject": "kor",
+      "no": 14,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-15",
+      "subject": "kor",
+      "no": 15,
+      "section": "공통",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-16",
+      "subject": "kor",
+      "no": 16,
+      "section": "공통",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-17",
+      "subject": "kor",
+      "no": 17,
+      "section": "공통",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-18",
+      "subject": "kor",
+      "no": 18,
+      "section": "공통",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-19",
+      "subject": "kor",
+      "no": 19,
+      "section": "공통",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-20",
+      "subject": "kor",
+      "no": 20,
+      "section": "공통",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-21",
+      "subject": "kor",
+      "no": 21,
+      "section": "공통",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-22",
+      "subject": "kor",
+      "no": 22,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-23",
+      "subject": "kor",
+      "no": 23,
+      "section": "공통",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-24",
+      "subject": "kor",
+      "no": 24,
+      "section": "공통",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-25",
+      "subject": "kor",
+      "no": 25,
+      "section": "공통",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-26",
+      "subject": "kor",
+      "no": 26,
+      "section": "공통",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-27",
+      "subject": "kor",
+      "no": 27,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-28",
+      "subject": "kor",
+      "no": 28,
+      "section": "공통",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-29",
+      "subject": "kor",
+      "no": 29,
+      "section": "공통",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-30",
+      "subject": "kor",
+      "no": 30,
+      "section": "공통",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-31",
+      "subject": "kor",
+      "no": 31,
+      "section": "공통",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-32",
+      "subject": "kor",
+      "no": 32,
+      "section": "공통",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-33",
+      "subject": "kor",
+      "no": 33,
+      "section": "공통",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-34",
+      "subject": "kor",
+      "no": 34,
+      "section": "공통",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-35s",
+      "subject": "kor",
+      "no": 35,
+      "section": "선택",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-36s",
+      "subject": "kor",
+      "no": 36,
+      "section": "선택",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-37s",
+      "subject": "kor",
+      "no": 37,
+      "section": "선택",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-38s",
+      "subject": "kor",
+      "no": 38,
+      "section": "선택",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-39s",
+      "subject": "kor",
+      "no": 39,
+      "section": "선택",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-40s",
+      "subject": "kor",
+      "no": 40,
+      "section": "선택",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-kor-41s",
+      "subject": "kor",
+      "no": 41,
+      "section": "선택",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-42s",
+      "subject": "kor",
+      "no": 42,
+      "section": "선택",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-43s",
+      "subject": "kor",
+      "no": 43,
+      "section": "선택",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-44s",
+      "subject": "kor",
+      "no": 44,
+      "section": "선택",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-kor-45s",
+      "subject": "kor",
+      "no": 45,
+      "section": "선택",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-01",
+      "subject": "mat",
+      "no": 1,
+      "section": "공통",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-mat-02",
+      "subject": "mat",
+      "no": 2,
+      "section": "공통",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-mat-03",
+      "subject": "mat",
+      "no": 3,
+      "section": "공통",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-04",
+      "subject": "mat",
+      "no": 4,
+      "section": "공통",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-05",
+      "subject": "mat",
+      "no": 5,
+      "section": "공통",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-06",
+      "subject": "mat",
+      "no": 6,
+      "section": "공통",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-07",
+      "subject": "mat",
+      "no": 7,
+      "section": "공통",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-08",
+      "subject": "mat",
+      "no": 8,
+      "section": "공통",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-09",
+      "subject": "mat",
+      "no": 9,
+      "section": "공통",
+      "answer": 4,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-10",
+      "subject": "mat",
+      "no": 10,
+      "section": "공통",
+      "answer": 3,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-11",
+      "subject": "mat",
+      "no": 11,
+      "section": "공통",
+      "answer": 3,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-12",
+      "subject": "mat",
+      "no": 12,
+      "section": "공통",
+      "answer": 2,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-13",
+      "subject": "mat",
+      "no": 13,
+      "section": "공통",
+      "answer": 5,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-14",
+      "subject": "mat",
+      "no": 14,
+      "section": "공통",
+      "answer": 4,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-15",
+      "subject": "mat",
+      "no": 15,
+      "section": "공통",
+      "answer": 4,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-16",
+      "subject": "mat",
+      "no": 16,
+      "section": "공통",
+      "answer": 9,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-17",
+      "subject": "mat",
+      "no": 17,
+      "section": "공통",
+      "answer": 16,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-18",
+      "subject": "mat",
+      "no": 18,
+      "section": "공통",
+      "answer": 12,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-19",
+      "subject": "mat",
+      "no": 19,
+      "section": "공통",
+      "answer": 15,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-20",
+      "subject": "mat",
+      "no": 20,
+      "section": "공통",
+      "answer": 130,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-21",
+      "subject": "mat",
+      "no": 21,
+      "section": "공통",
+      "answer": 65,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-22",
+      "subject": "mat",
+      "no": 22,
+      "section": "공통",
+      "answer": 457,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-23s",
+      "subject": "mat",
+      "no": 23,
+      "section": "선택",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-mat-24s",
+      "subject": "mat",
+      "no": 24,
+      "section": "선택",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-25s",
+      "subject": "mat",
+      "no": 25,
+      "section": "선택",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-26s",
+      "subject": "mat",
+      "no": 26,
+      "section": "선택",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-27s",
+      "subject": "mat",
+      "no": 27,
+      "section": "선택",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-mat-28s",
+      "subject": "mat",
+      "no": 28,
+      "section": "선택",
+      "answer": 2,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-29s",
+      "subject": "mat",
+      "no": 29,
+      "section": "선택",
+      "answer": 977,
+      "points": 4
+    },
+    {
+      "id": "2026-mat-30s",
+      "subject": "mat",
+      "no": 30,
+      "section": "선택",
+      "answer": 262,
+      "points": 4
+    },
+    {
+      "id": "2026-engR-18",
+      "subject": "engR",
+      "no": 18,
+      "section": "독해",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-19",
+      "subject": "engR",
+      "no": 19,
+      "section": "독해",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-20",
+      "subject": "engR",
+      "no": 20,
+      "section": "독해",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-21",
+      "subject": "engR",
+      "no": 21,
+      "section": "독해",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-22",
+      "subject": "engR",
+      "no": 22,
+      "section": "독해",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-23",
+      "subject": "engR",
+      "no": 23,
+      "section": "독해",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-24",
+      "subject": "engR",
+      "no": 24,
+      "section": "독해",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-25",
+      "subject": "engR",
+      "no": 25,
+      "section": "독해",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-26",
+      "subject": "engR",
+      "no": 26,
+      "section": "독해",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-27",
+      "subject": "engR",
+      "no": 27,
+      "section": "독해",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-28",
+      "subject": "engR",
+      "no": 28,
+      "section": "독해",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-29",
+      "subject": "engR",
+      "no": 29,
+      "section": "독해",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-30",
+      "subject": "engR",
+      "no": 30,
+      "section": "독해",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-31",
+      "subject": "engR",
+      "no": 31,
+      "section": "독해",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-32",
+      "subject": "engR",
+      "no": 32,
+      "section": "독해",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-33",
+      "subject": "engR",
+      "no": 33,
+      "section": "독해",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-34",
+      "subject": "engR",
+      "no": 34,
+      "section": "독해",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-35",
+      "subject": "engR",
+      "no": 35,
+      "section": "독해",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-36",
+      "subject": "engR",
+      "no": 36,
+      "section": "독해",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-37",
+      "subject": "engR",
+      "no": 37,
+      "section": "독해",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-38",
+      "subject": "engR",
+      "no": 38,
+      "section": "독해",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-39",
+      "subject": "engR",
+      "no": 39,
+      "section": "독해",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-40",
+      "subject": "engR",
+      "no": 40,
+      "section": "독해",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-41",
+      "subject": "engR",
+      "no": 41,
+      "section": "독해",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-engR-42",
+      "subject": "engR",
+      "no": 42,
+      "section": "독해",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-43",
+      "subject": "engR",
+      "no": 43,
+      "section": "독해",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-44",
+      "subject": "engR",
+      "no": 44,
+      "section": "독해",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-engR-45",
+      "subject": "engR",
+      "no": 45,
+      "section": "독해",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-his-01",
+      "subject": "his",
+      "no": 1,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-his-02",
+      "subject": "his",
+      "no": 2,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-his-03",
+      "subject": "his",
+      "no": 3,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-his-04",
+      "subject": "his",
+      "no": 4,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-his-05",
+      "subject": "his",
+      "no": 5,
+      "section": "",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-his-06",
+      "subject": "his",
+      "no": 6,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-his-07",
+      "subject": "his",
+      "no": 7,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-his-08",
+      "subject": "his",
+      "no": 8,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-his-09",
+      "subject": "his",
+      "no": 9,
+      "section": "",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-his-10",
+      "subject": "his",
+      "no": 10,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-his-11",
+      "subject": "his",
+      "no": 11,
+      "section": "",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-his-12",
+      "subject": "his",
+      "no": 12,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-his-13",
+      "subject": "his",
+      "no": 13,
+      "section": "",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-his-14",
+      "subject": "his",
+      "no": 14,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-his-15",
+      "subject": "his",
+      "no": 15,
+      "section": "",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-his-16",
+      "subject": "his",
+      "no": 16,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-his-17",
+      "subject": "his",
+      "no": 17,
+      "section": "",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-his-18",
+      "subject": "his",
+      "no": 18,
+      "section": "",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-his-19",
+      "subject": "his",
+      "no": 19,
+      "section": "",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-his-20",
+      "subject": "his",
+      "no": 20,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-01",
+      "subject": "eth",
+      "no": 1,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-02",
+      "subject": "eth",
+      "no": 2,
+      "section": "",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-03",
+      "subject": "eth",
+      "no": 3,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-04",
+      "subject": "eth",
+      "no": 4,
+      "section": "",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-05",
+      "subject": "eth",
+      "no": 5,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-06",
+      "subject": "eth",
+      "no": 6,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-07",
+      "subject": "eth",
+      "no": 7,
+      "section": "",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-08",
+      "subject": "eth",
+      "no": 8,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-09",
+      "subject": "eth",
+      "no": 9,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-10",
+      "subject": "eth",
+      "no": 10,
+      "section": "",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-11",
+      "subject": "eth",
+      "no": 11,
+      "section": "",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-12",
+      "subject": "eth",
+      "no": 12,
+      "section": "",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-13",
+      "subject": "eth",
+      "no": 13,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-14",
+      "subject": "eth",
+      "no": 14,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-15",
+      "subject": "eth",
+      "no": 15,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-16",
+      "subject": "eth",
+      "no": 16,
+      "section": "",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-17",
+      "subject": "eth",
+      "no": 17,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-18",
+      "subject": "eth",
+      "no": 18,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-eth-19",
+      "subject": "eth",
+      "no": 19,
+      "section": "",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-eth-20",
+      "subject": "eth",
+      "no": 20,
+      "section": "",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-01",
+      "subject": "soc",
+      "no": 1,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-02",
+      "subject": "soc",
+      "no": 2,
+      "section": "",
+      "answer": 2,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-03",
+      "subject": "soc",
+      "no": 3,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-04",
+      "subject": "soc",
+      "no": 4,
+      "section": "",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-05",
+      "subject": "soc",
+      "no": 5,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-06",
+      "subject": "soc",
+      "no": 6,
+      "section": "",
+      "answer": 1,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-07",
+      "subject": "soc",
+      "no": 7,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-08",
+      "subject": "soc",
+      "no": 8,
+      "section": "",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-09",
+      "subject": "soc",
+      "no": 9,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-10",
+      "subject": "soc",
+      "no": 10,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-11",
+      "subject": "soc",
+      "no": 11,
+      "section": "",
+      "answer": 4,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-12",
+      "subject": "soc",
+      "no": 12,
+      "section": "",
+      "answer": 1,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-13",
+      "subject": "soc",
+      "no": 13,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-14",
+      "subject": "soc",
+      "no": 14,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-15",
+      "subject": "soc",
+      "no": 15,
+      "section": "",
+      "answer": 5,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-16",
+      "subject": "soc",
+      "no": 16,
+      "section": "",
+      "answer": 5,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-17",
+      "subject": "soc",
+      "no": 17,
+      "section": "",
+      "answer": 4,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-18",
+      "subject": "soc",
+      "no": 18,
+      "section": "",
+      "answer": 2,
+      "points": 2
+    },
+    {
+      "id": "2026-soc-19",
+      "subject": "soc",
+      "no": 19,
+      "section": "",
+      "answer": 3,
+      "points": 3
+    },
+    {
+      "id": "2026-soc-20",
+      "subject": "soc",
+      "no": 20,
+      "section": "",
+      "answer": 3,
+      "points": 2
+    }
+  ]
+}
